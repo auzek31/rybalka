@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Рыбалка на Плещеевом озере с Дядей Ваней</title>
+    <!-- Возвращаем красивые аккуратные шрифты -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -32,6 +33,7 @@
             padding-bottom: 40px;
         }
 
+        /* Возвращаем красивую атмосферную шапку с лодкой */
         .header {
             background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=1200&q=80') center/cover;
             color: white;
@@ -292,7 +294,7 @@
             background: #22633d;
         }
 
-        /* Аккордеон для FAQ */
+        /* FAQ */
         .faq-item {
             border-bottom: 1px solid var(--border);
             padding: 12px 0;
@@ -344,6 +346,7 @@
 
     <div class="container">
 
+        <!-- Вкладки -->
         <div class="card">
             <div class="tabs-nav">
                 <button class="tab-btn active" onclick="switchTab('prog')">Программа</button>
@@ -384,7 +387,7 @@
             <div id="tab-faq" class="tab-content">
                 <h3 style="margin-bottom: 12px;">Часто задаваемые вопросы</h3>
                 <div class="faq-item">
-                    <div class="faq-question" onclick="toggleFaq(this)">Что делать в случае плохой погоды? <span>▼</span></div>
+                    <div class="faq-question" onclick="toggleFaq(this)">What to do in case of bad weather? <span>▼</span></div>
                     <div class="faq-answer">Мы внимательно следим за прогнозами. Если синоптики обещают штормовой ветер или затяжной ливень, мы свяжемся с вами накануне и бесплатно перенесем выезд на любую другую свободную дату.</div>
                 </div>
                 <div class="faq-item">
@@ -398,6 +401,7 @@
             </div>
         </div>
 
+        <!-- Конструктор бронирования с готовым ключом Formspree -->
         <form action="https://formspree.io/f/mpwwbven" method="POST" id="bookingForm">
             
             <div class="card">
@@ -405,8 +409,7 @@
                 <div class="calendar-header">
                     <span id="monthName">Май 2026</span>
                 </div>
-                <div class="calendar-grid" id="calendarDays">
-                    </div>
+                <div class="calendar-grid" id="calendarDays"></div>
                 <input type="hidden" name="Дата выезда" id="selectedDateInput" required>
             </div>
 
@@ -415,9 +418,7 @@
                 <p style="font-size: 0.9rem; color: var(--text-light);">Передвигайте ползунок, чтобы выбрать удобный час начала рыбалки</p>
                 <div class="slider-container">
                     <input type="range" min="8" max="36" value="10" class="range-slider" id="timeSlider" oninput="updateTimeDisplay()">
-                    <div class="time-display" id="timeDisplay">
-                        Время старта: 05:00
-                    </div>
+                    <div class="time-display" id="timeDisplay">Время старта: 05:00</div>
                 </div>
                 <input type="hidden" name="Время встречи" id="selectedTimeInput">
             </div>
@@ -505,16 +506,13 @@
     </div>
 
     <script>
-        // Переключение информационных вкладок
         function switchTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-            
             document.getElementById('tab-' + tabId).classList.add('active');
             event.currentTarget.classList.add('active');
         }
 
-        // Открытие/закрытие вопросов в FAQ
         function toggleFaq(element) {
             const answer = element.nextElementSibling;
             const arrow = element.querySelector('span');
@@ -527,10 +525,9 @@
             }
         }
 
-        // Построение интерактивного календаря
         const currentYear = 2026;
-        const currentMonth = 4; // Май (индекс 4)
-        const todayDate = 28;  // Зафиксировано текущей датой (28 мая)
+        const currentMonth = 4; // Май
+        const todayDate = 28;
 
         const monthNames = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"];
         
@@ -539,7 +536,6 @@
             const grid = document.getElementById('calendarDays');
             grid.innerHTML = '';
 
-            // Шапка дней недели
             const weekdays = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
             weekdays.forEach(day => {
                 const el = document.createElement('div');
@@ -548,27 +544,23 @@
                 grid.appendChild(el);
             });
 
-            // Определяем первый день мая 2026 года (Пятница -> индекс 4 в формате 0-Пн, 6-Вс)
             const firstDayIndex = 4; 
             const daysInMonth = 31;
 
-            // Смещение для первой недели
             for (let i = 0; i < firstDayIndex; i++) {
                 const emptyCell = document.createElement('div');
                 grid.appendChild(emptyCell);
             }
 
-            // Отрисовка чисел
             for (let d = 1; d <= daysInMonth; d++) {
                 const dayEl = document.createElement('div');
                 dayEl.className = 'day';
                 dayEl.textContent = d;
 
-                // Автоматическая блокировка прошедших дат (всё, что раньше 28 мая)
                 if (d < todayDate) {
                     dayEl.classList.add('disabled');
                 } else {
-                    dayEl.onclick = () => selectDate(d, dayEl);
+                    dayEl.onclick = function() { selectDate(d, dayEl); };
                 }
 
                 grid.appendChild(dayEl);
@@ -578,50 +570,40 @@
         function selectDate(day, element) {
             document.querySelectorAll('.day').forEach(el => el.classList.remove('selected'));
             element.classList.add('selected');
-            
             const formattedDate = `${day} ${monthNames[currentMonth]} ${currentYear} года`;
             document.getElementById('selectedDateInput').value = formattedDate;
         }
 
-        // Логика ползунка времени старта
         function updateTimeDisplay() {
             const slider = document.getElementById('timeSlider');
             const val = parseInt(slider.value);
-            
-            // Превращаем шаг слайдера в реальные часы и минуты
             const hours = Math.floor(val / 2);
             const minutes = val % 2 === 0 ? "00" : "30";
             const formattedHours = hours < 10 ? "0" + hours : hours;
-            
             const startTime = `${formattedHours}:${minutes}`;
             
-            // Расчет автоматического времени возврата (+6 часов на воде)
             let endHours = hours + 6;
             const formattedEndHours = endHours < 10 ? "0" + endHours : endHours;
             const endTime = `${formattedEndHours}:${minutes}`;
 
             document.getElementById('timeDisplay').innerHTML = `
-                <strong>Время встречи:</strong> с ${startTime} до ${endTime} (стандартный выезд на 6 часов)
+                <strong>Время встречи:</strong> с ${startTime} до ${endTime} (выезд на 6 часов)
             `;
             document.getElementById('selectedTimeInput').value = `с ${startTime} до ${endTime}`;
         }
 
-        // Калькулятор доп. услуг
         const prices = { spinning: 500, float: 300, bait: 500, tackle: 400 };
         const addons = { spinning: 0, float: 0, bait: 0, tackle: 0 };
 
         function changeAddon(type, change) {
             let newVal = addons[type] + change;
-            
-            // Ограничения (не меньше нуля, наживка и расходники не больше 1 комплекта)
             if (newVal < 0) return;
             if ((type === 'bait' || type === 'tackle') && newVal > 1) return;
-            if ((type === 'spinning' || type === 'float') && newVal > 4) return; // максимум 4 удочки
+            if ((type === 'spinning' || type === 'float') && newVal > 4) return;
 
             addons[type] = newVal;
             document.getElementById(`val-${type}`).textContent = newVal;
             
-            // Обновляем скрытые инпуты для формы
             if (type === 'spinning' || type === 'float') {
                 document.getElementById(`input-${type}`).value = newVal;
             } else {
@@ -632,8 +614,7 @@
         }
 
         function calculateTotal() {
-            let total = 9000; // Базовая цена выезда фиксированная
-            
+            let total = 9000;
             total += addons.spinning * prices.spinning;
             total += addons.float * prices.float;
             total += addons.bait * prices.bait;
@@ -643,7 +624,6 @@
             document.getElementById('finalPriceInput').value = total + ' руб';
         }
 
-        // Инициализация скриптов при загрузке страницы
         window.onload = function() {
             initCalendar();
             updateTimeDisplay();
