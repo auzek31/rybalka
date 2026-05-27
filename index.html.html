@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Охота и рыбалка с Дядей Ваней</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  /* Core palette — refined, high contrast */
+  --bg:        #0f1923;
+  --bg2:       #162030;
+  --bg3:       #1e2d40;
+  --surface:   #1a2a3a;
+  --surface2:  #243547;
+  --card:      #1f2f42;
+  --card2:     #253648;
+
+  /* Gold accent — rich, warm */
+  --gold:      #c9a227;
+  --gold2:     #e2b93b;
+  --gold3:     #f0cc66;
+  --gold-dim:  rgba(201,162,39,0.18);
+  --gold-dim2: rgba(201,162,39,0.08);
+
+  /* Text — maximum contrast */
+  --text:      #f0e8d8;
+  --text2:     #c8b99a;
+  --text3:     #8a7b66;
+  --text-inv:  #0f1923;
+
+  /* Semantic */
+  --green:     #4caf72;
+  --green-bg:  rgba(76,175,114,0.12);
+  --amber:     #e8a020;
+  --amber-bg:  rgba(232,160,32,0.12);
+  --blue:      #4a9fd4;
+  --blue-bg:   rgba(74,159,212,0.12);
+  --red:       #e05050;
+
+  --border:    rgba(201,162,39,0.2);
+  --border2:   rgba(240,204,102,0.1);
+  --r:         12px;
+  --r2:        8px;
+}
+
+html{scroll-behavior:smooth;}
+body{
+  font-family:'Raleway',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ─── SPLASH ─── */
+.splash{
+  position:fixed;inset:0;
+  background:var(--bg);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  z-index:999;
+  transition:opacity 0.7s ease, visibility 0.7s;
+}
+.splash.gone{opacity:0;visibility:hidden;pointer-events:none;}
+.splash-logo{
+  width:100px;height:100px;border-radius:50%;
+  border:1.5px solid var(--gold2);
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:20px;
+  animation:splashPulse 1.8s ease-in-out infinite;
+}
+.splash-logo svg{width:62px;height:62px;}
+@keyframes splashPulse{
+  0%,100%{box-shadow:0 0 0 0 rgba(201,162,39,0.25);}
+  50%{box-shadow:0 0 0 18px rgba(201,162,39,0);}
+}
+.splash-title{
+  font-family:'Playfair Display',serif;
+  font-size:19px;color:var(--text);
+  letter-spacing:0.5px;text-align:center;line-height:1.4;
+}
+.splash-sub{
+  font-size:10px;color:var(--text3);
+  letter-spacing:3.5px;text-transform:uppercase;margin-top:8px;
+}
+.splash-line{
+  width:50px;height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold2),transparent);
+  margin:18px auto 0;
+}
+
+/* ─── HEADER ─── */
+.app-header{
+  background:var(--bg2);
+  padding:16px 18px 0;
+  border-bottom:1px solid var(--border);
+}
+.header-emblem{display:flex;align-items:center;gap:12px;}
+.emblem-circle{
+  width:46px;height:46px;border-radius:50%;
+  border:1.5px solid var(--gold2);
+  background:var(--bg3);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.emblem-circle svg{width:28px;height:28px;}
+.h-title{
+  font-family:'Playfair Display',serif;
+  font-size:16px;color:var(--text);
+  font-weight:600;line-height:1.25;
+}
+.h-sub{
+  font-size:10px;color:var(--gold);
+  letter-spacing:1.5px;text-transform:uppercase;margin-top:3px;
+  font-weight:500;
+}
+.header-divider{
+  width:100%;height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+  margin-top:14px;opacity:0.3;
+}
+
+/* ─── NAV ─── */
+.nav{
+  display:flex;overflow-x:auto;gap:5px;
+  padding:10px 18px 9px;
+  background:var(--bg2);
+  scrollbar-width:none;
+  position:sticky;top:0;z-index:10;
+  border-bottom:1px solid var(--border2);
+}
+.nav::-webkit-scrollbar{display:none;}
+.nav-btn{
+  flex-shrink:0;
+  padding:7px 14px;
+  border-radius:20px;
+  border:1px solid var(--border);
+  background:transparent;
+  color:var(--text2);
+  font-size:12px;font-family:'Raleway',sans-serif;
+  cursor:pointer;
+  transition:all 0.2s;
+  white-space:nowrap;
+  letter-spacing:0.3px;
+  font-weight:500;
+}
+.nav-btn:hover{color:var(--text);border-color:var(--gold);background:var(--gold-dim2);}
+.nav-btn.active{
+  background:var(--gold);
+  border-color:var(--gold);
+  color:var(--text-inv);
+  font-weight:600;
+}
+
+/* ─── PAGES ─── */
+.page{display:none;padding:18px 18px 90px;animation:fadeUp 0.3s ease;}
+.page.active{display:block;}
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(8px);}
+  to{opacity:1;transform:translateY(0);}
+}
+
+/* ─── SECTION TITLE ─── */
+.sec-title{
+  font-family:'Playfair Display',serif;
+  font-size:18px;color:var(--text);
+  margin-bottom:14px;
+  padding-left:12px;
+  border-left:3px solid var(--gold);
+  line-height:1.3;
+  letter-spacing:0.2px;
+}
+
+/* ─── HERO ─── */
+.hero{
+  background:var(--surface);
+  border-radius:var(--r);
+  padding:22px 20px;
+  margin-bottom:16px;
+  position:relative;overflow:hidden;
+  border:1px solid var(--border);
+}
+.hero::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at top right, rgba(201,162,39,0.08) 0%, transparent 65%);
+  pointer-events:none;
+}
+.hero-pattern{
+  position:absolute;inset:0;
+  opacity:0.025;
+  background-image:repeating-linear-gradient(45deg,var(--gold2) 0,var(--gold2) 1px,transparent 0,transparent 50%);
+  background-size:10px 10px;
+}
+.hero-tag{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(201,162,39,0.15);
+  border:1px solid rgba(201,162,39,0.35);
+  border-radius:20px;
+  padding:4px 12px;
+  font-size:11px;color:var(--gold2);
+  letter-spacing:1px;text-transform:uppercase;
+  margin-bottom:12px;
+  font-weight:600;
+}
+.hero-title{
+  font-family:'Playfair Display',serif;
+  font-size:24px;font-weight:700;
+  color:var(--text);
+  line-height:1.25;margin-bottom:10px;
+  letter-spacing:0.3px;
+}
+.hero-desc{
+  font-size:14px;color:var(--text2);
+  line-height:1.7;
+}
+.hero-stats{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:10px;
+  margin-top:18px;
+  border-top:1px solid var(--border2);
+  padding-top:16px;
+}
+.stat{text-align:center;}
+.stat-n{
+  font-family:'Playfair Display',serif;
+  font-size:24px;color:var(--gold2);font-weight:700;
+}
+.stat-l{font-size:10px;color:var(--text3);margin-top:3px;letter-spacing:0.5px;line-height:1.4;}
+
+/* ─── BADGES ─── */
+.badge-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;}
+.badge{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:5px 12px;
+  border-radius:20px;font-size:11px;font-weight:600;border:1px solid;
+}
+.badge-green{background:var(--green-bg);color:var(--green);border-color:rgba(76,175,114,0.3);}
+.badge-amber{background:var(--amber-bg);color:var(--amber);border-color:rgba(232,160,32,0.3);}
+.badge-blue{background:var(--blue-bg);color:var(--blue);border-color:rgba(74,159,212,0.3);}
+
+/* ─── INFO CARD ─── */
+.info-card{
+  background:var(--card);
+  border:1px solid var(--border2);
+  border-radius:var(--r);
+  padding:16px;
+  margin-bottom:12px;
+}
+.ic-head{display:flex;align-items:center;gap:11px;margin-bottom:9px;}
+.ic-icon{font-size:21px;width:34px;text-align:center;flex-shrink:0;}
+.ic-title{font-size:14px;font-weight:600;color:var(--text);letter-spacing:0.2px;}
+.ic-body{font-size:13px;color:var(--text2);line-height:1.7;}
+.ic-accent{
+  background:var(--bg3);
+  border-left:3px solid var(--gold);
+  padding:10px 12px;
+  border-radius:0 var(--r2) var(--r2) 0;
+  margin-top:11px;
+  font-size:12px;color:var(--text2);
+  line-height:1.65;font-style:italic;
+}
+
+/* ─── HONEST BLOCK ─── */
+.honest-block{
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:var(--r);
+  padding:20px;
+  margin-bottom:16px;
+  position:relative;overflow:hidden;
+}
+.honest-block::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+}
+.hb-title{
+  font-family:'Playfair Display',serif;
+  font-size:16px;color:var(--gold2);
+  margin-bottom:12px;
+  display:flex;align-items:center;gap:9px;
+}
+.hb-body{font-size:13px;color:var(--text2);line-height:1.8;}
+.hb-body b{color:var(--text);font-weight:600;}
+
+/* ─── PRICE HERO ─── */
+.price-hero{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--r);
+  padding:22px 20px;
+  margin-bottom:16px;
+  text-align:center;
+  position:relative;overflow:hidden;
+}
+.price-hero::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at center top, rgba(201,162,39,0.1) 0%, transparent 65%);
+}
+.ph-pattern{
+  position:absolute;inset:0;opacity:0.02;
+  background-image:repeating-linear-gradient(45deg,var(--gold2) 0,var(--gold2) 1px,transparent 0,transparent 50%);
+  background-size:10px 10px;
+}
+.ph-price{
+  font-family:'Playfair Display',serif;
+  font-size:48px;font-weight:700;
+  color:var(--gold2);
+  line-height:1;
+  position:relative;
+}
+.ph-label{font-size:12px;color:var(--text2);margin-top:6px;letter-spacing:0.5px;}
+.ph-note{
+  background:rgba(201,162,39,0.1);
+  border:1px solid rgba(201,162,39,0.25);
+  border-radius:var(--r2);
+  padding:10px 14px;
+  margin-top:14px;
+  font-size:12px;color:var(--gold2);
+  line-height:1.55;
+  position:relative;
+}
+.includes{margin-top:16px;text-align:left;}
+.inc-item{
+  display:flex;align-items:flex-start;gap:11px;
+  padding:8px 0;
+  border-bottom:1px solid var(--border2);
+  font-size:13px;color:var(--text2);
+}
+.inc-item:last-child{border-bottom:none;}
+.inc-check{color:var(--gold2);flex-shrink:0;margin-top:1px;font-size:14px;}
+
+/* ─── TIMELINE ─── */
+.timeline{position:relative;padding-left:22px;}
+.timeline::before{
+  content:'';position:absolute;left:7px;top:10px;bottom:10px;
+  width:1px;
+  background:linear-gradient(180deg,var(--gold),transparent);
+}
+.tl-item{position:relative;margin-bottom:18px;}
+.tl-dot{
+  position:absolute;left:-22px;top:5px;
+  width:14px;height:14px;border-radius:50%;
+  background:var(--bg2);
+  border:2px solid var(--gold);
+  box-shadow:0 0 6px rgba(201,162,39,0.3);
+}
+.tl-time{font-size:11px;color:var(--gold);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;font-weight:600;}
+.tl-name{font-size:14px;font-weight:600;color:var(--text);margin-bottom:5px;}
+.tl-desc{font-size:13px;color:var(--text2);line-height:1.65;}
+
+/* ─── EQUIPMENT ─── */
+.eq-card{
+  background:var(--card);
+  border:1px solid var(--border2);
+  border-radius:var(--r);
+  padding:16px;
+  margin-bottom:10px;
+  transition:border-color 0.2s;
+}
+.eq-card:hover{border-color:var(--border);}
+.eq-head{display:flex;align-items:center;gap:13px;margin-bottom:8px;}
+.eq-emoji{font-size:26px;width:40px;text-align:center;flex-shrink:0;}
+.eq-name{font-size:15px;font-weight:600;color:var(--text);}
+.eq-type{font-size:10px;color:var(--gold);letter-spacing:1.5px;text-transform:uppercase;margin-top:2px;font-weight:600;}
+.eq-desc{font-size:13px;color:var(--text2);line-height:1.65;}
+.eq-tag{
+  display:inline-block;
+  background:var(--bg3);
+  border:1px solid var(--border2);
+  border-radius:20px;
+  padding:3px 10px;
+  font-size:11px;color:var(--text3);
+  margin-top:9px;margin-right:5px;
+}
+
+/* ─── GALLERY ─── */
+.gallery{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
+.gal-item{
+  background:var(--surface2);
+  border-radius:var(--r);
+  aspect-ratio:4/3;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  border:1px solid var(--border2);
+  overflow:hidden;position:relative;
+  transition:border-color 0.2s;
+}
+.gal-item:hover{border-color:var(--border);}
+.gal-emoji{font-size:38px;}
+.gal-cap{font-size:11px;color:var(--text2);margin-top:7px;text-align:center;padding:0 10px;line-height:1.4;}
+.gal-badge{
+  position:absolute;top:9px;right:9px;
+  background:var(--gold);
+  border-radius:20px;padding:2px 9px;
+  font-size:10px;color:var(--text-inv);font-weight:700;
+  letter-spacing:0.5px;
+}
+
+/* ─── FAQ ─── */
+.faq-item{
+  background:var(--card);
+  border:1px solid var(--border2);
+  border-radius:var(--r);
+  margin-bottom:8px;overflow:hidden;
+  transition:border-color 0.2s;
+}
+.faq-item:hover,.faq-item.open{border-color:var(--border);}
+.faq-q{
+  padding:14px 16px;
+  font-size:13px;font-weight:500;color:var(--text);
+  cursor:pointer;
+  display:flex;justify-content:space-between;align-items:center;gap:12px;
+  line-height:1.4;
+  user-select:none;
+}
+.faq-arr{
+  color:var(--gold);flex-shrink:0;font-size:18px;
+  transition:transform 0.25s;
+  line-height:1;
+}
+.faq-item.open .faq-arr{transform:rotate(180deg);}
+.faq-a{max-height:0;overflow:hidden;transition:max-height 0.35s ease,padding 0.35s;}
+.faq-item.open .faq-a{max-height:300px;padding:0 16px 16px;}
+.faq-a-text{
+  font-size:13px;color:var(--text2);
+  line-height:1.75;
+  border-top:1px solid var(--border2);
+  padding-top:12px;
+}
+
+/* ─── CONTACT ─── */
+.contact-card{
+  background:var(--card);
+  border:1px solid var(--border2);
+  border-radius:var(--r);
+  padding:18px;
+  margin-bottom:10px;
+  display:flex;align-items:center;gap:15px;
+}
+.cc-ico{
+  width:46px;height:46px;
+  background:var(--surface2);
+  border-radius:50%;border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;font-size:21px;
+}
+.cc-label{font-size:10px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;font-weight:600;}
+.cc-val{font-size:16px;font-weight:600;color:var(--text);margin-top:3px;}
+.call-btn{
+  width:100%;
+  background:var(--gold);
+  border:none;
+  border-radius:var(--r);
+  padding:15px;
+  font-size:15px;font-weight:600;
+  font-family:'Raleway',sans-serif;
+  color:var(--text-inv);
+  cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:9px;
+  margin-bottom:12px;
+  transition:background 0.2s,transform 0.1s;
+  letter-spacing:0.3px;
+}
+.call-btn:hover{background:var(--gold2);}
+.call-btn:active{transform:scale(0.98);}
+
+/* ─── BOOKING ─── */
+.step-bar{display:flex;gap:6px;margin-bottom:20px;}
+.sb{height:3px;flex:1;border-radius:2px;background:var(--bg3);transition:background 0.3s;}
+.sb.done{background:var(--gold);}
+.book-step{display:none;}
+.book-step.active{display:block;}
+.back-row{
+  display:inline-flex;align-items:center;gap:7px;
+  margin-bottom:16px;cursor:pointer;
+  color:var(--text3);font-size:13px;
+  font-weight:500;
+  transition:color 0.15s;
+}
+.back-row:hover{color:var(--text2);}
+
+.form-label{
+  font-size:10px;color:var(--gold);
+  letter-spacing:2px;text-transform:uppercase;
+  margin-bottom:9px;margin-top:18px;
+  font-weight:700;
+}
+.form-label:first-child{margin-top:0;}
+
+/* DATE GRID */
+.dates-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+.dc{
+  background:var(--card);
+  border:1px solid var(--border2);
+  border-radius:var(--r2);
+  padding:10px 4px;
+  text-align:center;cursor:pointer;
+  transition:all 0.15s;
+}
+.dc:hover{border-color:var(--gold);background:var(--card2);}
+.dc.sel{background:var(--gold);border-color:var(--gold);}
+.dc.sold{opacity:0.3;cursor:not-allowed;pointer-events:none;}
+.dc-day{font-size:15px;font-weight:600;color:var(--text);}
+.dc.sel .dc-day,.dc.sel .dc-mo,.dc.sel .dc-sold{color:var(--text-inv);}
+.dc-mo{font-size:10px;color:var(--text3);margin-top:2px;}
+.dc-sold{font-size:9px;color:var(--red);margin-top:2px;}
+
+/* TIME */
+.time-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:6px;}
+.time-select{
+  background:var(--card);
+  border:1px solid var(--border2);
+  border-radius:var(--r2);
+  padding:11px 13px;
+  font-size:14px;color:var(--text);
+  font-family:'Raleway',sans-serif;
+  outline:none;cursor:pointer;width:100%;
+  transition:border-color 0.15s;
+  -webkit-appearance:none;
+}
+.time-select:focus{border-color:var(--gold);}
+.time-select option{background:var(--card2);color:var(--text);}
+.time-hint{
+  font-size:12px;color:var(--text2);
+  margin-top:8px;line-height:1.55;
+  background:var(--gold-dim2);
+  border:1px solid var(--gold-dim);
+  border-radius:var(--r2);
+  padding:9px 12px;
+}
+
+/* COUNTER */
+.ctr-wrap{
+  display:flex;align-items:center;
+  background:var(--card);
+  border:1px solid var(--border2);
+  border-radius:var(--r2);
+  overflow:hidden;
+  width:fit-content;
+}
+.ctr-btn{
+  background:transparent;border:none;
+  width:44px;height:44px;
+  font-size:22px;color:var(--gold);
+  cursor:pointer;font-family:'Raleway',sans-serif;
+  transition:background 0.1s;
+}
+.ctr-btn:hover{background:var(--card2);}
+.ctr-v{
+  width:54px;text-align:center;
+  font-size:15px;font-weight:600;color:var(--text);
+  border-left:1px solid var(--border2);
+  border-right:1px solid var(--border2);
+  height:44px;line-height:44px;
+}
+.price-note{font-size:12px;color:var(--gold);margin-top:9px;font-weight:500;}
+
+/* EXTRAS */
+.extra-row{
+  background:var(--card);
+  border:1px solid var(--border2);
+  border-radius:var(--r);
+  padding:13px 15px;
+  margin-bottom:9px;
+  display:flex;align-items:center;gap:13px;
+  transition:border-color 0.15s;
+}
+.extra-row.sel{border-color:var(--gold);background:var(--card2);}
+.ex-ico{font-size:23px;width:32px;text-align:center;flex-shrink:0;}
+.ex-inf{flex:1;}
+.ex-name{font-size:14px;font-weight:600;color:var(--text);}
+.ex-price{font-size:12px;color:var(--gold);margin-top:2px;font-weight:500;}
+.ex-ctrl{display:flex;align-items:center;flex-shrink:0;}
+.ex-btn{
+  background:var(--bg3);
+  border:1px solid var(--border2);
+  width:30px;height:30px;
+  font-size:17px;cursor:pointer;
+  color:var(--text2);
+  display:flex;align-items:center;justify-content:center;
+  transition:background 0.1s,color 0.1s;
+  font-family:'Raleway',sans-serif;
+}
+.ex-btn:first-child{border-radius:6px 0 0 6px;border-right:none;}
+.ex-btn:last-child{border-radius:0 6px 6px 0;border-left:none;}
+.ex-btn:hover{background:var(--surface2);color:var(--gold);}
+.ex-qty{
+  width:34px;height:30px;
+  text-align:center;line-height:30px;
+  font-size:13px;font-weight:600;color:var(--text);
+  background:var(--bg2);
+  border-top:1px solid var(--border2);
+  border-bottom:1px solid var(--border2);
+}
+
+/* INPUT */
+.inp{
+  width:100%;
+  background:var(--card);
+  border:1px solid var(--border2);
+  border-radius:var(--r2);
+  padding:12px 14px;
+  font-size:14px;color:var(--text);
+  font-family:'Raleway',sans-serif;
+  outline:none;
+  transition:border-color 0.15s;
+}
+.inp:focus{border-color:var(--gold);}
+.inp::placeholder{color:var(--text3);}
+
+/* SUMMARY BOX */
+.sum-box{
+  background:var(--card);
+  border:1px solid var(--border2);
+  border-radius:var(--r);
+  padding:16px;
+  margin-top:16px;
+}
+.sum-row{
+  display:flex;justify-content:space-between;
+  padding:8px 0;
+  border-bottom:1px solid var(--border2);
+  font-size:13px;
+}
+.sum-row:last-child{border-bottom:none;}
+.sum-lbl{color:var(--text3);}
+.sum-val{color:var(--text);font-weight:500;}
+.sum-total{display:flex;justify-content:space-between;padding:14px 0 2px;}
+.sum-tl{font-size:15px;font-weight:600;color:var(--text);}
+.sum-tv{font-family:'Playfair Display',serif;font-size:24px;color:var(--gold2);}
+
+/* BUTTONS */
+.main-btn{
+  width:100%;
+  background:var(--gold);
+  border:none;
+  border-radius:var(--r);
+  padding:15px;
+  font-size:15px;font-weight:600;
+  font-family:'Raleway',sans-serif;
+  color:var(--text-inv);
+  cursor:pointer;
+  margin-top:18px;
+  transition:background 0.2s,transform 0.1s;
+  letter-spacing:0.3px;
+}
+.main-btn:hover{background:var(--gold2);}
+.main-btn:active{transform:scale(0.98);}
+.main-btn:disabled{
+  opacity:0.35;cursor:not-allowed;
+  background:var(--surface2);color:var(--text3);
+}
+
+/* SUCCESS */
+.success-wrap{text-align:center;padding:28px 0 8px;}
+.s-emblem{font-size:64px;margin-bottom:16px;display:block;}
+.s-title{
+  font-family:'Playfair Display',serif;
+  font-size:24px;color:var(--text);
+  margin-bottom:10px;
+}
+.s-sub{font-size:13px;color:var(--text2);line-height:1.75;}
+.s-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--r);
+  padding:16px;margin:20px 0;text-align:left;
+}
+
+/* TIPS */
+.tip-card{
+  background:var(--card);
+  border:1px solid var(--border2);
+  border-radius:var(--r);
+  padding:16px;
+  margin-bottom:10px;
+  display:flex;gap:14px;align-items:flex-start;
+  transition:border-color 0.2s;
+}
+.tip-card:hover{border-color:var(--border);}
+.tip-num{
+  font-family:'Playfair Display',serif;
+  font-size:28px;color:var(--gold-dim);
+  font-weight:700;flex-shrink:0;line-height:1;
+  min-width:36px;
+  color:rgba(201,162,39,0.25);
+}
+.tip-title{font-size:14px;font-weight:600;color:var(--text);margin-bottom:5px;}
+.tip-body{font-size:13px;color:var(--text2);line-height:1.65;}
+
+/* ─── SCROLLBAR ─── */
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
+
+</style>
+
+<!-- SPLASH -->
+<div class="splash" id="splash">
+  <div class="splash-logo">
+    <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="30" cy="30" r="28" stroke="#c9a227" stroke-width="1.5" fill="none"/>
+      <path d="M10 35 Q20 20 30 30 Q40 38 50 25" stroke="#c9a227" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      <ellipse cx="30" cy="32" rx="8" ry="5" stroke="#c9a227" stroke-width="1" fill="none" transform="rotate(-15 30 32)"/>
+      <circle cx="33" cy="30" r="1.2" fill="#c9a227"/>
+      <path d="M14 42 Q22 38 30 40 Q38 42 46 38" stroke="#c9a227" stroke-width="1" fill="none" opacity="0.35"/>
+    </svg>
+  </div>
+  <div class="splash-title">Охота и рыбалка<br>с Дядей Ваней</div>
+  <div class="splash-sub">Переславль-Залесский</div>
+  <div class="splash-line"></div>
+</div>
+
+<!-- HEADER -->
+<div class="app-header">
+  <div class="header-emblem">
+    <div class="emblem-circle">
+      <svg viewBox="0 0 40 40" fill="none">
+        <circle cx="20" cy="20" r="18" stroke="#c9a227" stroke-width="1" fill="none"/>
+        <path d="M6 25 Q14 14 20 20 Q26 26 34 17" stroke="#c9a227" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        <ellipse cx="20" cy="22" rx="5" ry="3.5" stroke="#c9a227" stroke-width="1" fill="none" transform="rotate(-15 20 22)"/>
+        <circle cx="22" cy="20" r="1" fill="#c9a227"/>
+      </svg>
+    </div>
+    <div class="header-text">
+      <div class="h-title">Охота и рыбалка с Дядей Ваней</div>
+      <div class="h-sub">Плещеево озеро · Переславль-Залесский</div>
+    </div>
+  </div>
+  <div class="header-divider"></div>
+</div>
+
+<!-- NAV -->
+<div class="nav">
+  <button class="nav-btn active" onclick="showPage('home')">Главная</button>
+  <button class="nav-btn" onclick="showPage('program')">Программа</button>
+  <button class="nav-btn" onclick="showPage('equipment')">Снаряжение</button>
+  <button class="nav-btn" onclick="showPage('tips')">Новичкам</button>
+  <button class="nav-btn" onclick="showPage('faq')">FAQ</button>
+  <button class="nav-btn" onclick="showPage('contact')">Контакты</button>
+  <button class="nav-btn" onclick="showPage('book')">Записаться</button>
+</div>
+
+<!-- HOME -->
+<div class="page active" id="page-home">
+  <div class="hero">
+    <div class="hero-pattern"></div>
+    <div class="hero-tag">🐟 Сезон открыт</div>
+    <div class="hero-title">Настоящая рыбалка<br>на Плещеевом озере</div>
+    <div class="hero-desc">Секретные и проверенные места, где клюёт. Дядя Ваня знает каждый метр озера уже больше 15 лет — и готов поделиться этим с вами.</div>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-n">15+</div><div class="stat-l">лет на озере</div></div>
+      <div class="stat"><div class="stat-n">500+</div><div class="stat-l">гостей</div></div>
+      <div class="stat"><div class="stat-n">до 4</div><div class="stat-l">человек в группе</div></div>
+    </div>
+  </div>
+
+  <div class="badge-row">
+    <span class="badge badge-green">✓ Сезон открыт</span>
+    <span class="badge badge-amber">⚡ Осталось 3 места в июне</span>
+    <span class="badge badge-blue">📍 Плещеево озеро</span>
+  </div>
+
+  <div class="sec-title">Почему едут к нам</div>
+  <div class="info-card">
+    <div class="ic-head"><div class="ic-icon">📍</div><div class="ic-title">Секретные точки</div></div>
+    <div class="ic-body">За 15 лет Дядя Ваня нашёл места, куда обычные туристы не доберутся. Щука, окунь, лещ, карась — в зависимости от сезона и настроения рыбы.</div>
+  </div>
+  <div class="info-card">
+    <div class="ic-head"><div class="ic-icon">👥</div><div class="ic-title">Максимум 4 человека</div></div>
+    <div class="ic-body">Никакой толкотни на берегу. Только вы, природа и хороший клёв. Идеально для компании друзей или семьи.</div>
+  </div>
+
+  <div class="honest-block">
+    <div class="hb-title">🤝 Честно о рыбалке</div>
+    <div class="hb-body">Мы не обещаем, что вы обязательно поймаете рыбу — <b>никто не может этого гарантировать</b>. Рыба живёт по своим законам: погода, давление, сезон, настроение — всё это влияет. Но вот что мы <b>гарантируем точно</b>: лучшие места на озере, правильные снасти, опытный проводник рядом и незабываемое время на природе. Дядя Ваня сделает всё, что в человеческих силах. Остальное — за рыбой.</div>
+  </div>
+
+  <div class="sec-title">Галерея уловов</div>
+  <div class="gallery">
+    <div class="gal-item"><div class="gal-emoji">🐟</div><div class="gal-cap">Щука 4.2 кг<br>Июнь 2024</div><div class="gal-badge">Трофей</div></div>
+    <div class="gal-item"><div class="gal-emoji">🎣</div><div class="gal-cap">Утренняя зорька<br>Май 2024</div></div>
+    <div class="gal-item"><div class="gal-emoji">🌅</div><div class="gal-cap">Рассвет на Плещеевом<br>Апрель 2024</div></div>
+    <div class="gal-item"><div class="gal-emoji">🐠</div><div class="gal-cap">Улов за день<br>Июль 2024</div><div class="gal-badge">Рекорд</div></div>
+  </div>
+
+  <button class="main-btn" onclick="showPage('book')">🎣 Записаться на тур — 9 000 ₽</button>
+</div>
+
+<!-- PROGRAM -->
+<div class="page" id="page-program">
+  <div class="price-hero">
+    <div class="ph-pattern"></div>
+    <div class="ph-price">9 000 ₽</div>
+    <div class="ph-label">за выезд · до 4 человек · любое время</div>
+    <div class="ph-note">💡 Платите за выезд, а не за каждого человека. Зовите друзей — цена не меняется!</div>
+    <div class="includes">
+      <div class="inc-item"><span class="inc-check">✓</span>Дядя Ваня лично проводит весь тур</div>
+      <div class="inc-item"><span class="inc-check">✓</span>Секретные и проверенные места на озере</div>
+      <div class="inc-item"><span class="inc-check">✓</span>Помощь с выбором снастей и техники</div>
+      <div class="inc-item"><span class="inc-check">✓</span>Продолжительность — по вашему выбору</div>
+      <div class="inc-item"><span class="inc-check">✓</span>Улов забираете с собой</div>
+      <div class="inc-item"><span class="inc-check">✓</span>Спасательные жилеты для всех</div>
+    </div>
+  </div>
+
+  <div class="sec-title">Как проходит день</div>
+  <div class="timeline">
+    <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">🌅 Ранний выезд</div><div class="tl-name">Встреча на берегу</div><div class="tl-desc">Лучший клёв — на рассвете. Дядя Ваня уже знает куда идти, исходя из погоды и сезона. Точку встречи присылает накануне.</div></div>
+    <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">🎣 Рыбалка</div><div class="tl-name">На проверенных точках</div><div class="tl-desc">Расставляем снасти, занимаем лучшие позиции. Дядя Ваня подскажет технику новичкам и не будет мешать опытным рыболовам.</div></div>
+    <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">☕ Перерыв</div><div class="tl-name">Чай и отдых</div><div class="tl-desc">Природа, тишина, запах озера и утренний туман. По желанию — мангал прямо на берегу (аренда отдельно).</div></div>
+    <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">🏆 Финал</div><div class="tl-name">Фото с уловом</div><div class="tl-desc">Взвешиваем улов, фотографируемся на память. Рыбу забираете с собой или по желанию отпускаете.</div></div>
+  </div>
+</div>
+
+<!-- EQUIPMENT -->
+<div class="page" id="page-equipment">
+  <div class="sec-title">Наше снаряжение</div>
+  <div style="font-size:13px;color:var(--text2);margin-bottom:16px;line-height:1.65;">Не нужно везти ничего с собой — у нас есть всё необходимое. Каждый предмет проверен на Плещеевом озере.</div>
+
+  <div class="eq-card">
+    <div class="eq-head"><div class="eq-emoji">🚤</div><div><div class="eq-name">Моторная лодка</div><div class="eq-type">Судно</div></div></div>
+    <div class="eq-desc">Алюминиевая лодка с надёжным мотором. Вместительная, устойчивая, подходит для 4 человек. Позволяет добраться до самых отдалённых и клёвых мест озера, куда с берега не дотянуться.</div>
+    <span class="eq-tag">до 4 чел.</span><span class="eq-tag">мотор</span><span class="eq-tag">алюминий</span>
+  </div>
+  <div class="eq-card">
+    <div class="eq-head"><div class="eq-emoji">🎣</div><div><div class="eq-name">Спиннинги</div><div class="eq-type">Удилища</div></div></div>
+    <div class="eq-desc">Лёгкие и средние спиннинги для ловли щуки, окуня и судака. Оснащены качественными катушками с плетёной леской. Идеальны для активной ловли с лодки и с берега.</div>
+    <span class="eq-tag">щука</span><span class="eq-tag">окунь</span><span class="eq-tag">судак</span>
+  </div>
+  <div class="eq-card">
+    <div class="eq-head"><div class="eq-emoji">🪝</div><div><div class="eq-name">Поплавочные удочки</div><div class="eq-type">Удилища</div></div></div>
+    <div class="eq-desc">Телескопические удочки с поплавочной оснасткой — классика озёрной рыбалки. Отлично подходят новичкам и детям. Ловим леща, карася, плотву и ерша на спокойных местах.</div>
+    <span class="eq-tag">новичкам</span><span class="eq-tag">лещ</span><span class="eq-tag">карась</span>
+  </div>
+  <div class="eq-card">
+    <div class="eq-head"><div class="eq-emoji">🪱</div><div><div class="eq-name">Наживка и приманки</div><div class="eq-type">Расходники</div></div></div>
+    <div class="eq-desc">Живой червь, опарыш, мотыль — для поплавочной ловли. Силиконовые приманки, блёсны и воблеры — для спиннинга. Дядя Ваня подберёт под сезон и конкретный день.</div>
+    <span class="eq-tag">живая наживка</span><span class="eq-tag">силикон</span><span class="eq-tag">блёсны</span>
+  </div>
+  <div class="eq-card">
+    <div class="eq-head"><div class="eq-emoji">🦺</div><div><div class="eq-name">Спасательные жилеты</div><div class="eq-type">Безопасность</div></div></div>
+    <div class="eq-desc">Сертифицированные спасательные жилеты для всех участников тура — включены в стоимость. Есть размеры для детей. Безопасность на воде — без компромиссов.</div>
+    <span class="eq-tag">включено</span><span class="eq-tag">для детей</span><span class="eq-tag">сертификат</span>
+  </div>
+  <div class="eq-card">
+    <div class="eq-head"><div class="eq-emoji">🪣</div><div><div class="eq-name">Садки и подсачеки</div><div class="eq-type">Хранение улова</div></div></div>
+    <div class="eq-desc">Просторные садки для хранения живой рыбы прямо в воде. Подсачек с длинной ручкой для вываживания крупной рыбы — особенно важен при ловле щуки со спиннингом.</div>
+    <span class="eq-tag">садок</span><span class="eq-tag">подсачек</span>
+  </div>
+  <div class="eq-card">
+    <div class="eq-head"><div class="eq-emoji">🧰</div><div><div class="eq-name">Инструменты рыболова</div><div class="eq-type">Аксессуары</div></div></div>
+    <div class="eq-desc">Экстрактор для крючков, зевник, кусачки, запасные крючки и поводки, весы для взвешивания трофеев. Всё необходимое для комфортной и безопасной рыбалки.</div>
+    <span class="eq-tag">экстрактор</span><span class="eq-tag">весы</span><span class="eq-tag">запасная оснастка</span>
+  </div>
+</div>
+
+<!-- TIPS -->
+<div class="page" id="page-tips">
+  <div class="sec-title">Советы новичку</div>
+  <div style="font-size:13px;color:var(--text2);margin-bottom:16px;line-height:1.65;">Едете первый раз? Не переживайте. Вот всё что нужно знать заранее.</div>
+
+  <div class="tip-card"><div class="tip-num">01</div><div><div class="tip-title">Что надеть</div><div class="tip-body">Одевайтесь по принципу «лук-луковица» — несколько слоёв. Утром на озере холоднее, чем кажется. Резиновые сапоги или треккинговые ботинки, непромокаемая куртка. Головной убор обязателен.</div></div></div>
+  <div class="tip-card"><div class="tip-num">02</div><div><div class="tip-title">Что взять с собой</div><div class="tip-body">Еда и вода на весь день, термос с чаем, солнцезащитный крем и средство от комаров. Снасти брать не нужно — всё есть в аренду. Возьмите пакет или контейнер для улова.</div></div></div>
+  <div class="tip-card"><div class="tip-num">03</div><div><div class="tip-title">Как держать удочку</div><div class="tip-body">Дядя Ваня покажет на месте — это занимает 5 минут. Главное правило: удочку держим расслабленно, не напрягаем руку. Заброс — плавный, не резкий. Не стесняйтесь спрашивать!</div></div></div>
+  <div class="tip-card"><div class="tip-num">04</div><div><div class="tip-title">Что делать когда клюнет</div><div class="tip-body">Не торопитесь! Дайте рыбе заглотить наживку. Потом плавная подсечка — поднимаем удилище вверх. При вываживании не дёргайте, ведите рыбу плавно. Дядя Ваня всегда рядом.</div></div></div>
+  <div class="tip-card"><div class="tip-num">05</div><div><div class="tip-title">Тишина — лучший друг</div><div class="tip-body">Рыба пугается шума и вибрации. Не стучите по лодке, говорите тихо, не бросайте предметы в воде. Чем тише — тем лучше клёв. Природа сама научит терпению.</div></div></div>
+  <div class="tip-card"><div class="tip-num">06</div><div><div class="tip-title">Безопасность на воде</div><div class="tip-body">Жилет не снимаем в лодке — это правило без исключений. Не встаём резко, не раскачиваемся. Если укачивает — сразу говорим Дяде Ване. Лучше выйти на берег, чем терпеть.</div></div></div>
+</div>
+
+<!-- FAQ -->
+<div class="page" id="page-faq">
+  <div class="sec-title">Частые вопросы</div>
+
+  <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-q">Гарантируете ли вы улов? <span class="faq-arr">▾</span></div><div class="faq-a"><div class="faq-a-text">Нет — и любой, кто гарантирует улов, говорит неправду. Рыба — не актёр, она живёт по законам природы: погода, давление, сезон, температура воды — всё это влияет. Мы гарантируем лучшие места, правильные снасти и опытного проводника. Шансы будут максимальными — это честно.</div></div></div>
+  <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-q">Нужна ли лицензия на рыбалку? <span class="faq-arr">▾</span></div><div class="faq-a"><div class="faq-a-text">Нет. Любительская рыбалка на Плещеевом озере разрешена без лицензии. Дядя Ваня знает все правила и ограничения национального парка — всё будет законно и без штрафов.</div></div></div>
+  <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-q">Что если погода испортится? <span class="faq-arr">▾</span></div><div class="faq-a"><div class="faq-a-text">Свяжемся заранее и вместе выберем другой день. Деньги не пропадают, перенос без штрафов и без лишних вопросов. Рыбалку в шторм или ливень мы не проводим — безопасность важнее.</div></div></div>
+  <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-q">Как происходит оплата? <span class="faq-arr">▾</span></div><div class="faq-a"><div class="faq-a-text">Оплата в день выезда — наличными или переводом на карту. Предоплата не требуется. Записались — значит договорились. Если планы поменялись, просто предупредите заранее.</div></div></div>
+  <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-q">Можно с детьми? <span class="faq-arr">▾</span></div><div class="faq-a"><div class="faq-a-text">Да, дети обожают рыбалку! Рекомендуем с 6 лет. Дядя Ваня найдёт место поспокойнее, подберёт лёгкую удочку. Детские спасательные жилеты есть в наличии.</div></div></div>
+  <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-q">Что делать с уловом? <span class="faq-arr">▾</span></div><div class="faq-a"><div class="faq-a-text">Улов ваш — забираете с собой. Можем помочь почистить рыбу прямо на берегу, дадим пакет. Если хотите — отпустите рыбу обратно, это тоже нормально и уважаемо.</div></div></div>
+  <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-q">Когда лучший сезон для рыбалки? <span class="faq-arr">▾</span></div><div class="faq-a"><div class="faq-a-text">Май–июнь и август–сентябрь — самые активные периоды. Весной хорошо берёт щука, летом — окунь и лещ, осенью жирует судак. Зимой работаем тоже — подлёдная рыбалка отдельно.</div></div></div>
+  <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-q">Чем отличается утренняя рыбалка от вечерней? <span class="faq-arr">▾</span></div><div class="faq-a"><div class="faq-a-text">Утро — самый активный клёв, особенно на хищника. Тихо, туманно, рыба у поверхности. Вечер — второй пик активности, хорошо клюёт лещ и карась. Оба варианта хороши, выбор за вами.</div></div></div>
+  <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-q">Есть ли парковка у озера? <span class="faq-arr">▾</span></div><div class="faq-a"><div class="faq-a-text">Да, место для парковки есть. Точные координаты встречи Дядя Ваня пришлёт после подтверждения брони — заедете без проблем.</div></div></div>
+  <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-q">Есть ли туалет на месте? <span class="faq-arr">▾</span></div><div class="faq-a"><div class="faq-a-text">Мы выезжаем на природу, поэтому цивилизованного туалета нет. Но места уединённые, лесок рядом всегда есть. Это рыбалка — всё по-настоящему.</div></div></div>
+  <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-q">Можно с собакой? <span class="faq-arr">▾</span></div><div class="faq-a"><div class="faq-a-text">Обсуждаемо — зависит от породы и характера питомца. Собака в лодке — нестандартная ситуация. Уточните при записи, найдём решение.</div></div></div>
+  <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-q">Как добраться до Переславля-Залесского? <span class="faq-arr">▾</span></div><div class="faq-a"><div class="faq-a-text">140 км от Москвы по Ярославскому шоссе М8, около 2 часов езды. Есть автобусы с Щёлковского автовокзала. Точку встречи Дядя Ваня пришлёт накануне выезда.</div></div></div>
+</div>
+
+<!-- CONTACT -->
+<div class="page" id="page-contact">
+  <div class="sec-title">Связаться с нами</div>
+  <div style="font-size:13px;color:var(--text2);margin-bottom:18px;line-height:1.65;">Не хотите заполнять форму? Просто позвоните — Дядя Ваня ответит лично.</div>
+
+  <div class="contact-card"><div class="cc-ico">📞</div><div><div class="cc-label">Телефон / WhatsApp</div><div class="cc-val">+7 995 692-60-86</div></div></div>
+  <a href="tel:+79956926086" style="text-decoration:none;"><button class="call-btn">📞 Позвонить Дяде Ване</button></a>
+
+  <div class="info-card" style="margin-top:4px;">
+    <div class="ic-head"><div class="ic-icon">💬</div><div class="ic-title">Режим работы</div></div>
+    <div class="ic-body">Отвечаем с 7:00 до 21:00. Если не берём трубку — значит на озере. Перезвоним как выберемся на берег 😄</div>
+  </div>
+
+  <button class="main-btn" onclick="showPage('book')">🎣 Записаться онлайн</button>
+</div>
+
+<!-- BOOK -->
+<div class="page" id="page-book">
+  <div class="step-bar">
+    <div class="sb done" id="sb1"></div>
+    <div class="sb" id="sb2"></div>
+    <div class="sb" id="sb3"></div>
+    <div class="sb" id="sb4"></div>
+  </div>
+
+  <!-- Step 1 -->
+  <div class="book-step active" id="bs1">
+    <div class="sec-title">Выберите дату</div>
+    <div class="info-card" style="margin-bottom:16px;">
+      <div class="ic-body">⛅ Выбирайте день с хорошей погодой — рыба лучше клюёт в ясную погоду без сильного ветра. Если погода подведёт — перенесём без штрафов.</div>
+    </div>
+    <div class="dates-grid" id="dates-grid"></div>
+    <div style="display:flex;gap:14px;margin-top:11px;font-size:11px;color:var(--text3);">
+      <span>◻ свободно</span><span style="opacity:0.4">◻ занято</span>
+    </div>
+    <button class="main-btn" id="btn-bs1" onclick="goBook(2)" disabled>Далее →</button>
+  </div>
+
+  <!-- Step 2 -->
+  <div class="book-step" id="bs2">
+    <div class="back-row" onclick="goBook(1)">← Назад</div>
+    <div class="sec-title">Время и состав</div>
+
+    <div class="form-label">Время выезда</div>
+    <div class="time-row">
+      <div><div style="font-size:10px;color:var(--text3);margin-bottom:6px;letter-spacing:1px;text-transform:uppercase;">С</div>
+      <select class="time-select" id="time-from" onchange="updateTimeSummary()">
+        <option>05:00</option><option>06:00</option><option selected>07:00</option><option>08:00</option><option>09:00</option><option>10:00</option><option>11:00</option><option>12:00</option>
+      </select></div>
+      <div><div style="font-size:10px;color:var(--text3);margin-bottom:6px;letter-spacing:1px;text-transform:uppercase;">До</div>
+      <select class="time-select" id="time-to" onchange="updateTimeSummary()">
+        <option>12:00</option><option>13:00</option><option selected>14:00</option><option>15:00</option><option>16:00</option><option>17:00</option><option>18:00</option><option>19:00</option><option>20:00</option>
+      </select></div>
+    </div>
+    <div class="time-hint" id="time-hint">⏱ Продолжительность: 7 ч. · Утренняя зорька — самый активный клёв!</div>
+
+    <div class="form-label" style="margin-top:20px;">Количество человек</div>
+    <div class="ctr-wrap">
+      <button class="ctr-btn" onclick="chCount(-1)">−</button>
+      <div class="ctr-v" id="cnt-v">1</div>
+      <button class="ctr-btn" onclick="chCount(1)">+</button>
+    </div>
+    <div class="price-note">9 000 ₽ за всю группу — цена не меняется от числа людей</div>
+    <button class="main-btn" onclick="goBook(3)">Далее →</button>
+  </div>
+
+  <!-- Step 3 -->
+  <div class="book-step" id="bs3">
+    <div class="back-row" onclick="goBook(2)">← Назад</div>
+    <div class="sec-title">Доп. услуги</div>
+    <div style="font-size:13px;color:var(--text2);margin-bottom:14px;">Выберите нужное количество каждой услуги</div>
+
+    <div id="extras-list"></div>
+
+    <div class="sum-box">
+      <div class="sum-row"><span class="sum-lbl">Базовый тур</span><span class="sum-val">9 000 ₽</span></div>
+      <div class="sum-row" id="ex-sum-row" style="display:none"><span class="sum-lbl">Доп. услуги</span><span class="sum-val" id="ex-sum-val">0 ₽</span></div>
+      <div class="sum-total"><span class="sum-tl">Итого</span><span class="sum-tv" id="ex-total">9 000 ₽</span></div>
+    </div>
+    <button class="main-btn" onclick="goBook(4)">Далее →</button>
+  </div>
+
+  <!-- Step 4 -->
+  <div class="book-step" id="bs4">
+    <div class="back-row" onclick="goBook(3)">← Назад</div>
+    <div class="sec-title">Ваши данные</div>
+    <div class="form-label">Имя и фамилия</div>
+    <input class="inp" id="inp-name" type="text" placeholder="Иван Иванов" oninput="chkForm()">
+    <div class="form-label">Номер телефона</div>
+    <input class="inp" id="inp-phone" type="tel" placeholder="+7 (___) ___-__-__" oninput="chkForm()">
+    <div class="form-label">Комментарий (необязательно)</div>
+    <textarea class="inp" id="inp-note" rows="2" placeholder="Едем с ребёнком, хотим на щуку..." style="resize:none"></textarea>
+
+    <div class="sum-box">
+      <div class="sum-row"><span class="sum-lbl">Дата</span><span class="sum-val" id="sv-date">—</span></div>
+      <div class="sum-row"><span class="sum-lbl">Время</span><span class="sum-val" id="sv-time">—</span></div>
+      <div class="sum-row"><span class="sum-lbl">Человек</span><span class="sum-val" id="sv-count">—</span></div>
+      <div class="sum-row" id="sv-ex-row" style="display:none"><span class="sum-lbl">Доп. услуги</span><span class="sum-val" id="sv-ex">—</span></div>
+      <div class="sum-total"><span class="sum-tl">Итого</span><span class="sum-tv" id="sv-total">9 000 ₽</span></div>
+    </div>
+    <button class="main-btn" id="btn-confirm" onclick="doConfirm()" disabled>🎣 Забронировать</button>
+  </div>
+
+  <!-- Success -->
+  <div class="book-step" id="bs5">
+    <div class="success-wrap">
+      <span class="s-emblem">🐟</span>
+      <div class="s-title">Бронь принята!</div>
+      <div class="s-sub">Дядя Ваня свяжется с вами в течение часа для подтверждения. Готовьте снасти и хорошее настроение!</div>
+      <div class="s-card" id="s-details"></div>
+      <div class="s-sub" style="margin-top:8px;">Удачной рыбалки на Плещеевом! 🎣</div>
+      <button class="main-btn" onclick="restart()">Новая запись</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const extrasData=[
+  {id:'ex0',name:'Аренда спиннинга',price:500,unit:'чел.',icon:'🎣'},
+  {id:'ex1',name:'Аренда поплавочной удочки',price:300,unit:'чел.',icon:'🪝'},
+  {id:'ex2',name:'Наживка и приманки',price:300,unit:'набор',icon:'🪱'},
+  {id:'ex3',name:'Садок для рыбы',price:150,unit:'шт.',icon:'🪣'},
+  {id:'ex4',name:'Складное кресло',price:200,unit:'шт.',icon:'🪑'},
+  {id:'ex5',name:'Мангал с углём',price:800,unit:'аренда',icon:'🍖'},
+  {id:'ex6',name:'Фотосъёмка улова',price:1500,unit:'услуга',icon:'📸'},
+];
+let exQty={};
+extrasData.forEach(e=>exQty[e.id]=0);
+let st={date:null,count:1};
+
+function buildExtras(){
+  const el=document.getElementById('extras-list');el.innerHTML='';
+  extrasData.forEach(e=>{
+    const d=document.createElement('div');
+    d.className='extra-row';d.id='erow-'+e.id;
+    d.innerHTML=`<div class="ex-ico">${e.icon}</div><div class="ex-inf"><div class="ex-name">${e.name}</div><div class="ex-price">+${e.price.toLocaleString('ru')} ₽ / ${e.unit}</div></div><div class="ex-ctrl"><button class="ex-btn" onclick="chEx('${e.id}',-1)">−</button><div class="ex-qty" id="qty-${e.id}">0</div><button class="ex-btn" onclick="chEx('${e.id}',1)">+</button></div>`;
+    el.appendChild(d);
+  });
+}
+
+function chEx(id,d){
+  exQty[id]=Math.max(0,Math.min(10,exQty[id]+d));
+  document.getElementById('qty-'+id).textContent=exQty[id];
+  document.getElementById('erow-'+id).classList.toggle('sel',exQty[id]>0);
+  updateExTotal();
+}
+
+function calcExTotal(){
+  let t=0;extrasData.forEach(e=>{if(exQty[e.id]>0)t+=e.price*exQty[e.id];});return t;
+}
+
+function updateExTotal(){
+  const et=calcExTotal(),total=9000+et;
+  if(et>0){document.getElementById('ex-sum-row').style.display='';document.getElementById('ex-sum-val').textContent=et.toLocaleString('ru')+' ₽';}
+  else document.getElementById('ex-sum-row').style.display='none';
+  document.getElementById('ex-total').textContent=total.toLocaleString('ru')+' ₽';
+}
+
+function genDates(){
+  const g=document.getElementById('dates-grid');g.innerHTML='';
+  const now=new Date();
+  const mo=['янв','фев','мар','апр','май','июн','июл','авг','сен','окт','ноя','дек'];
+  const moF=['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
+  const sold=[2,5,9,13];
+  for(let i=1;i<=16;i++){
+    const d=new Date(now);d.setDate(d.getDate()+i);
+    const isSold=sold.includes(i);
+    const el=document.createElement('div');
+    el.className='dc'+(isSold?' sold':'');
+    el.innerHTML=`<div class="dc-day">${d.getDate()}</div><div class="dc-mo">${mo[d.getMonth()]}</div>${isSold?'<div class="dc-sold">занято</div>':''}`;
+    if(!isSold){const key=`${d.getDate()} ${moF[d.getMonth()]}`;el.onclick=()=>{document.querySelectorAll('.dc').forEach(c=>c.classList.remove('sel'));el.classList.add('sel');st.date=key;document.getElementById('btn-bs1').disabled=false;};}
+    g.appendChild(el);
+  }
+}
+
+function updateTimeSummary(){
+  const f=document.getElementById('time-from').value,t=document.getElementById('time-to').value;
+  const fh=parseInt(f),th=parseInt(t);
+  let dur=th-fh;if(dur<=0)dur+=24;
+  let tip='';
+  if(fh<=7)tip='🌅 Утренняя зорька — самый активный клёв!';
+  else if(fh<=10)tip='☀️ Утренняя рыбалка — хорошее время';
+  else if(fh>=17)tip='🌇 Вечерняя зорька — отлично для леща и карася';
+  else tip='🌤 Дневная рыбалка';
+  document.getElementById('time-hint').textContent=`⏱ Продолжительность: ${dur} ч. · ${tip}`;
+}
+
+function chCount(d){st.count=Math.max(1,Math.min(4,st.count+d));document.getElementById('cnt-v').textContent=st.count;}
+
+function fillSummary(){
+  document.getElementById('sv-date').textContent=st.date||'—';
+  document.getElementById('sv-time').textContent=document.getElementById('time-from').value+' — '+document.getElementById('time-to').value;
+  document.getElementById('sv-count').textContent=st.count+' чел.';
+  const et=calcExTotal(),names=extrasData.filter(e=>exQty[e.id]>0).map(e=>e.name).join(', ');
+  if(et>0){document.getElementById('sv-ex-row').style.display='';document.getElementById('sv-ex').textContent=names;}
+  else document.getElementById('sv-ex-row').style.display='none';
+  document.getElementById('sv-total').textContent=(9000+et).toLocaleString('ru')+' ₽';
+}
+
+function goBook(n){
+  document.querySelectorAll('.book-step').forEach(s=>s.classList.remove('active'));
+  document.getElementById('bs'+n).classList.add('active');
+  for(let i=1;i<=4;i++){const d=document.getElementById('sb'+i);if(d)d.classList.toggle('done',i<=n);}
+  if(n===4)fillSummary();
+}
+
+function chkForm(){
+  const n=document.getElementById('inp-name').value.trim(),p=document.getElementById('inp-phone').value.trim();
+  document.getElementById('btn-confirm').disabled=!(n.length>1&&p.length>6);
+}
+
+function doConfirm(){
+  const name=document.getElementById('inp-name').value.trim(),phone=document.getElementById('inp-phone').value.trim(),et=calcExTotal();
+  document.getElementById('s-details').innerHTML=
+    `<div class="sum-row"><span class="sum-lbl">Имя</span><span class="sum-val">${name}</span></div>`+
+    `<div class="sum-row"><span class="sum-lbl">Телефон</span><span class="sum-val">${phone}</span></div>`+
+    `<div class="sum-row"><span class="sum-lbl">Дата</span><span class="sum-val">${st.date}</span></div>`+
+    `<div class="sum-row"><span class="sum-lbl">Время</span><span class="sum-val">${document.getElementById('time-from').value} — ${document.getElementById('time-to').value}</span></div>`+
+    `<div class="sum-row" style="border:none"><span class="sum-lbl">Итого</span><span class="sum-val" style="color:var(--gold2);font-size:16px">${(9000+et).toLocaleString('ru')} ₽</span></div>`;
+  goBook(5);
+}
+
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  const pages=['home','program','equipment','tips','faq','contact','book'];
+  const idx=pages.indexOf(id);
+  if(idx>=0)document.querySelectorAll('.nav-btn')[idx].classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function toggleFaq(el){el.classList.toggle('open');}
+
+function restart(){
+  st={date:null,count:1};
+  extrasData.forEach(e=>exQty[e.id]=0);
+  document.getElementById('inp-name').value='';
+  document.getElementById('inp-phone').value='';
+  document.getElementById('inp-note').value='';
+  buildExtras();genDates();goBook(1);showPage('book');
+  document.getElementById('btn-bs1').disabled=true;
+}
+
+setTimeout(()=>document.getElementById('splash').classList.add('gone'),2200);
+buildExtras();genDates();updateTimeSummary();
+</script>
