@@ -4,9 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Рыбалка на Плещеевом озере с Дядей Ваней</title>
-    <!-- Подключаем VK Bridge для автозаполнения -->
-    <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser/vk-bridge.min.js"></script>
-    <!-- Google Fonts для аккуратного интерфейса -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -347,7 +344,6 @@
 
     <div class="container">
 
-        <!-- Вкладки с информацией -->
         <div class="card">
             <div class="tabs-nav">
                 <button class="tab-btn active" onclick="switchTab('prog')">Программа</button>
@@ -356,7 +352,6 @@
                 <button class="tab-btn" onclick="switchTab('faq')">Вопросы и ответы</button>
             </div>
 
-            <!-- Вкладка: Программа -->
             <div id="tab-prog" class="tab-content active">
                 <h3 style="margin-bottom: 12px;">Как проходит выезд</h3>
                 <p style="margin-bottom: 12px;">Мы встречаемся на берегу Плещеева озера в заранее согласованное время, готовим лодку к выходу и отправляемся на воду.</p>
@@ -368,7 +363,6 @@
                 </ul>
             </div>
 
-            <!-- Вкладка: Сезоны -->
             <div id="tab-seasons" class="tab-content">
                 <h3 style="margin-bottom: 12px;">Календарь клёва на озере</h3>
                 <ul class="info-list">
@@ -378,7 +372,6 @@
                 </ul>
             </div>
 
-            <!-- Вкладка: Советы -->
             <div id="tab-tips" class="tab-content">
                 <h3 style="margin-bottom: 12px;">Рекомендации перед выездом</h3>
                 <ul class="info-list">
@@ -388,7 +381,6 @@
                 </ul>
             </div>
 
-            <!-- Вкладка: FAQ -->
             <div id="tab-faq" class="tab-content">
                 <h3 style="margin-bottom: 12px;">Часто задаваемые вопросы</h3>
                 <div class="faq-item">
@@ -406,22 +398,18 @@
             </div>
         </div>
 
-        <!-- Конструктор бронирования с готовым ключом Formspree -->
         <form action="https://formspree.io/f/mpwwbven" method="POST" id="bookingForm">
             
-            <!-- Шаг 1: Календарь на месяц -->
             <div class="card">
                 <h3 style="margin-bottom: 15px;">1. Выберите дату выезда</h3>
                 <div class="calendar-header">
                     <span id="monthName">Май 2026</span>
                 </div>
                 <div class="calendar-grid" id="calendarDays">
-                    <!-- Заполняется автоматически через JS -->
-                </div>
+                    </div>
                 <input type="hidden" name="Дата выезда" id="selectedDateInput" required>
             </div>
 
-            <!-- Шаг 2: Ползунок времени старта -->
             <div class="card">
                 <h3 style="margin-bottom: 5px;">2. Время встречи на берегу</h3>
                 <p style="font-size: 0.9rem; color: var(--text-light);">Передвигайте ползунок, чтобы выбрать удобный час начала рыбалки</p>
@@ -434,7 +422,6 @@
                 <input type="hidden" name="Время встречи" id="selectedTimeInput">
             </div>
 
-            <!-- Шаг 3: Аренда снаряжения (Допы) -->
             <div class="card">
                 <h3 style="margin-bottom: 5px;">3. Дополнительное снаряжение</h3>
                 <p style="font-size: 0.9rem; color: var(--text-light); margin-bottom: 15px;">Лодка и спасательные жилеты уже включены в стоимость. Удочки и наживку можно арендовать при необходимости.</p>
@@ -487,14 +474,12 @@
                     </div>
                 </div>
 
-                <!-- Скрытые поля для передачи в Formspree -->
                 <input type="hidden" name="Спиннинги (шт)" id="input-spinning" value="0">
                 <input type="hidden" name="Поплавочные удочки (шт)" id="input-float" value="0">
                 <input type="hidden" name="Наживка и прикормка" id="input-bait" value="Нет">
                 <input type="hidden" name="Набор снастей" id="input-tackle" value="Нет">
             </div>
 
-            <!-- Шаг 4: Контакты -->
             <div class="card">
                 <h3 style="margin-bottom: 15px;">4. Контактные данные</h3>
                 <div class="form-group">
@@ -507,7 +492,6 @@
                 </div>
             </div>
 
-            <!-- Финальный расчет стоимости -->
             <div class="total-panel">
                 <div class="total-row">
                     <span>Итого к оплате:</span>
@@ -659,35 +643,10 @@
             document.getElementById('finalPriceInput').value = total + ' руб';
         }
 
-        // Автозаполнение из профиля VK (безбарьерный фоновый режим)
-        function initVkAutofill() {
-            vkBridge.send('VKWebAppInit')
-                .then(() => {
-                    return vkBridge.send('VKWebAppGetUserInfo');
-                })
-                .then((data) => {
-                    if (data) {
-                        if (data.first_name) {
-                            document.getElementById('userName').value = data.first_name;
-                        }
-                    }
-                    return vkBridge.send('VKWebAppGetPersonalCard', { "type": ["phone"] });
-                })
-                .then((cardData) => {
-                    if (cardData && cardData.phone) {
-                        document.getElementById('userPhone').value = cardData.phone;
-                    }
-                })
-                .catch((error) => {
-                    console.log("Автозаполнение отклонено или недоступно, пользователь введет данные вручную.");
-                });
-        }
-
         // Инициализация скриптов при загрузке страницы
         window.onload = function() {
             initCalendar();
             updateTimeDisplay();
-            initVkAutofill();
         };
     </script>
 </body>
