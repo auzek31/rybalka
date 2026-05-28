@@ -6,163 +6,192 @@
 <title>Админка — Дядя Ваня</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Raleway:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
 :root{
-  --bg:#0c1520;--bg2:#111d2e;--card:#16243a;--card2:#1c2d45;
-  --gold:#c9a227;--gold2:#e2b93b;--gold3:#f0cc66;
-  --text:#f2ead8;--text2:#c8b99a;--text3:#7d8ba0;--text-inv:#0c1520;
-  --green:#4caf72;--green-bg:rgba(76,175,114,0.15);
-  --amber:#e8a020;--amber-bg:rgba(232,160,32,0.15);
-  --red:#e05555;--red-bg:rgba(224,85,85,0.15);
-  --blue:#4a9fd4;--blue-bg:rgba(74,159,212,0.15);
-  --border:rgba(201,162,39,0.2);--border2:rgba(255,255,255,0.06);
-  --r:16px;--r2:12px;
+  --bg:#0e1621;--bg2:#131e2c;
+  --tile:#1c2a3d;--tile-light:#22344a;--tile-deep:#13294a;
+  --card:#182535;--card2:#1e2f44;
+  --accent:#3b8fd6;--accent2:#4fa3e8;
+  --text:#ffffff;--text2:#a8b5c7;--text3:#6b7a90;
+  --green:#46c178;--amber:#e8a72a;--red:#e85555;--gold:#e2b93b;
+  --border:rgba(255,255,255,0.07);
+  --r:18px;--r2:14px;
 }
 html{scroll-behavior:smooth;}
-body{font-family:'Raleway',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased;padding-bottom:80px;}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased;padding-bottom:92px;}
 
-/* HEADER / PROFILE */
+/* PROFILE HEADER */
 .profile{display:flex;align-items:center;gap:14px;padding:20px 18px 18px;}
-.pf-avatar{width:54px;height:54px;border-radius:50%;border:2px solid var(--gold2);background:var(--card);display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;}
-.pf-avatar svg{width:34px;height:34px;}
+.pf-avatar{width:52px;height:52px;border-radius:50%;border:2px solid rgba(255,255,255,0.12);background:var(--tile);display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;}
+.pf-avatar svg{width:32px;height:32px;}
 .pf-info{flex:1;}
-.pf-name{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--text);line-height:1.1;}
-.pf-sub{font-size:12px;color:var(--gold);letter-spacing:1px;text-transform:uppercase;margin-top:3px;}
-.pf-gear{width:40px;height:40px;border-radius:50%;background:var(--card);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;cursor:pointer;transition:background 0.2s;}
-.pf-gear:active{background:var(--card2);}
+.pf-name{font-size:22px;font-weight:700;color:var(--text);line-height:1.1;}
+.pf-sub{font-size:14px;color:var(--text3);margin-top:2px;}
+.pf-gear{width:44px;height:44px;border-radius:50%;background:var(--tile);display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;transition:all 0.2s;}
+.pf-gear svg{width:22px;height:22px;fill:var(--text3);}
+.pf-gear:active{transform:scale(0.94);}
 
 /* PAGES */
-.page{display:none;padding:0 18px;animation:fadeUp 0.3s ease;}
+.page{display:none;padding:0 18px;animation:fadeIn 0.25s ease;}
 .page.active{display:block;}
-@keyframes fadeUp{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
 
-.sec-title{font-family:'Playfair Display',serif;font-size:18px;color:var(--text);margin:6px 0 14px;display:flex;align-items:center;justify-content:space-between;}
-.sec-title .count{font-family:'Raleway',sans-serif;font-size:12px;color:var(--gold);background:var(--card);border:1px solid var(--border);border-radius:20px;padding:3px 11px;font-weight:600;}
+.sec-title{font-size:20px;font-weight:700;color:var(--text);margin:6px 0 14px;display:flex;align-items:center;justify-content:space-between;}
+.sec-title .count{font-size:13px;color:var(--text2);background:var(--tile);border-radius:20px;padding:4px 13px;font-weight:600;}
+
+/* DASHBOARD — точная копия референса */
+.dash{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-bottom:16px;}
+.dash-col{display:flex;flex-direction:column;gap:13px;}
+
+.tile{border-radius:var(--r);padding:18px;position:relative;overflow:hidden;cursor:pointer;transition:transform 0.12s;background:linear-gradient(160deg,var(--tile-light),var(--tile));border:1px solid var(--border);}
+.tile:active{transform:scale(0.97);}
+.tile.deep{background:linear-gradient(160deg,#244468,#162d4d);}
+.tile-big-h{min-height:175px;display:flex;flex-direction:column;}
+.tile-sm-h{min-height:80px;display:flex;align-items:center;}
+.tile-title{font-size:19px;font-weight:700;color:var(--text);line-height:1.15;position:relative;z-index:2;}
+.tile-sub{font-size:14px;color:var(--text3);margin-top:3px;position:relative;z-index:2;}
+.tile-wm{position:absolute;right:8px;top:50%;transform:translateY(-50%);opacity:0.06;pointer-events:none;z-index:1;}
+.tile-wm svg{width:110px;height:110px;}
+.tile-corner{position:absolute;bottom:16px;right:16px;display:flex;gap:8px;z-index:3;}
+.tile-circle{width:34px;height:34px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;}
+.tile-circle svg{width:18px;height:18px;}
+.tile-circle.dark{background:rgba(255,255,255,0.12);}
+.tile-circle.dark svg{stroke:#fff;}
+.tile-val{font-size:30px;font-weight:800;position:relative;z-index:2;margin-top:auto;}
+
+/* small tile (right column) horizontal layout */
+.tile-sm{flex:1;justify-content:space-between;}
+.tile-sm .tile-icon-r{width:30px;height:30px;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+.tile-sm .tile-icon-r svg{width:24px;height:24px;}
+
+/* PROMO BANNER */
+.promo{border-radius:var(--r);padding:20px;margin-bottom:18px;position:relative;overflow:hidden;background:linear-gradient(110deg,#6a3fd4 0%,#4361c4 45%,#2d8fb8 100%);cursor:pointer;transition:transform 0.12s;}
+.promo:active{transform:scale(0.985);}
+.promo-title{font-size:18px;font-weight:700;color:#fff;margin-bottom:6px;position:relative;z-index:2;}
+.promo-text{font-size:13px;color:rgba(255,255,255,0.82);line-height:1.5;position:relative;z-index:2;max-width:72%;}
+.promo-emoji{position:absolute;right:18px;top:50%;transform:translateY(-50%);font-size:48px;z-index:2;}
 
 /* FILTERS */
-.filters{display:flex;gap:7px;overflow-x:auto;padding-bottom:14px;scrollbar-width:none;}
+.filters{display:flex;gap:8px;overflow-x:auto;padding-bottom:14px;scrollbar-width:none;margin:0 -18px;padding-left:18px;padding-right:18px;}
 .filters::-webkit-scrollbar{display:none;}
-.filter-btn{flex-shrink:0;padding:7px 14px;border-radius:20px;border:1px solid var(--border2);background:var(--card);color:var(--text2);font-size:12px;font-family:'Raleway',sans-serif;cursor:pointer;transition:all 0.2s;white-space:nowrap;font-weight:500;}
-.filter-btn.active{background:var(--gold);border-color:var(--gold);color:var(--text-inv);font-weight:600;}
+.filter-btn{flex-shrink:0;padding:9px 16px;border-radius:22px;border:none;background:var(--tile);color:var(--text2);font-size:13px;font-family:'Inter',sans-serif;cursor:pointer;transition:all 0.2s;white-space:nowrap;font-weight:600;display:flex;align-items:center;gap:6px;}
+.filter-btn .fdot{width:8px;height:8px;border-radius:50%;}
+.filter-btn.active{background:var(--accent);color:#fff;}
 
 /* BOOKING CARD */
-.booking-card{background:var(--card);border:1px solid var(--border2);border-radius:var(--r);padding:16px;margin-bottom:12px;cursor:pointer;transition:transform 0.15s,border-color 0.2s;position:relative;overflow:hidden;}
-.booking-card:active{transform:scale(0.985);}
+.booking-card{background:linear-gradient(160deg,var(--card2),var(--card));border:1px solid var(--border);border-radius:var(--r);padding:18px;margin-bottom:13px;cursor:pointer;transition:transform 0.12s;position:relative;overflow:hidden;}
+.booking-card:active{transform:scale(0.98);}
 .bc-status-bar{position:absolute;top:0;left:0;bottom:0;width:4px;}
 .bc-status-bar.pending{background:var(--amber);}
 .bc-status-bar.confirmed{background:var(--green);}
 .bc-status-bar.cancelled{background:var(--red);}
-.bc-head{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;}
-.bc-name{font-size:16px;font-weight:700;color:var(--text);}
-.bc-phone{font-size:12px;color:var(--text3);margin-top:2px;}
-.bc-status{font-size:10px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;padding:4px 10px;border-radius:20px;white-space:nowrap;}
-.bc-status.pending{background:var(--amber-bg);color:var(--amber);}
-.bc-status.confirmed{background:var(--green-bg);color:var(--green);}
-.bc-status.cancelled{background:var(--red-bg);color:var(--red);}
-.bc-details{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;}
-.bc-chip{font-size:11px;color:var(--text2);background:var(--bg2);border:1px solid var(--border2);border-radius:8px;padding:5px 9px;display:flex;align-items:center;gap:4px;}
-.bc-footer{display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--border2);padding-top:11px;}
-.bc-total{font-family:'Playfair Display',serif;font-size:18px;color:var(--gold2);font-weight:700;}
-.bc-date-created{font-size:10px;color:var(--text3);}
+.bc-head{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px;}
+.bc-name{font-size:17px;font-weight:700;color:var(--text);}
+.bc-phone{font-size:13px;color:var(--text3);margin-top:2px;}
+.bc-status{font-size:10px;font-weight:700;letter-spacing:0.4px;text-transform:uppercase;padding:5px 11px;border-radius:20px;white-space:nowrap;}
+.bc-status.pending{background:rgba(232,167,42,0.16);color:var(--amber);}
+.bc-status.confirmed{background:rgba(70,193,120,0.16);color:var(--green);}
+.bc-status.cancelled{background:rgba(232,85,85,0.16);color:var(--red);}
+.bc-details{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;}
+.bc-chip{font-size:12px;color:var(--text2);background:rgba(0,0,0,0.22);border-radius:9px;padding:6px 10px;display:flex;align-items:center;gap:5px;}
+.bc-footer{display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--border);padding-top:12px;}
+.bc-total{font-size:20px;color:var(--text);font-weight:800;}
+.bc-date-created{font-size:11px;color:var(--text3);}
 
-.empty-state{text-align:center;padding:50px 20px;color:var(--text3);}
-.empty-state .es-icon{font-size:48px;margin-bottom:14px;opacity:0.5;}
+.empty-state{text-align:center;padding:60px 20px;color:var(--text3);}
+.empty-state .es-icon{font-size:50px;margin-bottom:14px;opacity:0.4;}
 .empty-state .es-text{font-size:14px;line-height:1.6;}
 
 /* MODAL */
-.modal-overlay{position:fixed;inset:0;background:rgba(8,15,25,0.8);backdrop-filter:blur(4px);z-index:200;display:none;align-items:flex-end;}
+.modal-overlay{position:fixed;inset:0;background:rgba(6,12,20,0.82);backdrop-filter:blur(6px);z-index:200;display:none;align-items:flex-end;}
 .modal-overlay.show{display:flex;}
-.modal{background:var(--bg2);border-radius:24px 24px 0 0;width:100%;max-height:88vh;overflow-y:auto;padding:8px 18px 28px;animation:slideUp 0.3s ease;border-top:1px solid var(--border);}
+.modal{background:var(--bg2);border-radius:26px 26px 0 0;width:100%;max-height:90vh;overflow-y:auto;padding:8px 18px 28px;animation:slideUp 0.3s cubic-bezier(0.16,1,0.3,1);}
 @keyframes slideUp{from{transform:translateY(100%);}to{transform:translateY(0);}}
-.modal-handle{width:40px;height:4px;border-radius:2px;background:var(--text3);margin:8px auto 18px;opacity:0.4;}
-.modal-title{font-family:'Playfair Display',serif;font-size:22px;color:var(--text);margin-bottom:4px;}
+.modal-handle{width:40px;height:4px;border-radius:2px;background:var(--text3);margin:10px auto 18px;opacity:0.4;}
+.modal-title{font-size:23px;color:var(--text);margin-bottom:4px;font-weight:700;}
 .modal-sub{font-size:12px;color:var(--text3);margin-bottom:18px;}
-.md-section{background:var(--card);border:1px solid var(--border2);border-radius:var(--r2);padding:14px 16px;margin-bottom:12px;}
-.md-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--border2);font-size:13px;}
+.md-section{background:var(--card);border:1px solid var(--border);border-radius:var(--r2);padding:14px 16px;margin-bottom:12px;}
+.md-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px;}
 .md-row:last-child{border-bottom:none;}
 .md-lbl{color:var(--text3);}
 .md-val{color:var(--text);font-weight:600;text-align:right;}
 .md-total{display:flex;justify-content:space-between;align-items:center;padding:10px 0 2px;}
-.md-total .v{font-family:'Playfair Display',serif;font-size:22px;color:var(--gold2);font-weight:700;}
+.md-total .v{font-size:23px;color:var(--text);font-weight:800;}
 
 .action-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px;}
-.act-btn{border:none;border-radius:var(--r2);padding:14px;font-size:14px;font-weight:600;font-family:'Raleway',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;transition:opacity 0.15s,transform 0.1s;}
-.act-btn:active{transform:scale(0.97);}
+.act-btn{border:none;border-radius:var(--r2);padding:15px;font-size:14px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;transition:transform 0.1s;}
+.act-btn:active{transform:scale(0.96);}
 .act-confirm{background:var(--green);color:#fff;}
 .act-cancel{background:var(--red);color:#fff;}
-.act-move{background:var(--card2);color:var(--text);border:1px solid var(--border);}
-.act-call{background:var(--blue);color:#fff;text-decoration:none;}
+.act-move{background:var(--tile);color:var(--text);}
+.act-call{background:var(--accent);color:#fff;text-decoration:none;}
 .act-wa{background:#25D366;color:#fff;text-decoration:none;}
 .act-full{grid-column:1/3;}
 
 /* CALENDAR */
-.cal-legend{display:flex;gap:14px;margin-bottom:14px;font-size:11px;color:var(--text3);flex-wrap:wrap;}
-.cal-legend span{display:flex;align-items:center;gap:5px;}
-.cal-dot{width:10px;height:10px;border-radius:3px;}
-.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;}
-.cal-head{font-size:10px;color:var(--text3);text-align:center;padding:4px 0;font-weight:600;text-transform:uppercase;}
-.cal-cell{aspect-ratio:1;border-radius:9px;background:var(--card);border:1px solid var(--border2);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:all 0.15s;font-size:13px;color:var(--text);position:relative;}
-.cal-cell:active{transform:scale(0.94);}
-.cal-cell.empty{background:transparent;border:none;cursor:default;}
-.cal-cell.booked{background:var(--green-bg);border-color:rgba(76,175,114,0.4);color:var(--green);}
-.cal-cell.blocked{background:var(--red-bg);border-color:rgba(224,85,85,0.4);color:var(--red);}
+.cal-legend{display:flex;gap:16px;margin-bottom:18px;font-size:12px;color:var(--text3);flex-wrap:wrap;}
+.cal-legend span{display:flex;align-items:center;gap:6px;}
+.cal-dot{width:11px;height:11px;border-radius:4px;}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:7px;}
+.cal-head{font-size:10px;color:var(--text3);text-align:center;padding:5px 0;font-weight:700;text-transform:uppercase;}
+.cal-cell{aspect-ratio:1;border-radius:12px;background:var(--tile);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:all 0.12s;font-size:14px;color:var(--text);position:relative;font-weight:500;}
+.cal-cell:active{transform:scale(0.92);}
+.cal-cell.empty{background:transparent;cursor:default;}
+.cal-cell.booked{background:rgba(70,193,120,0.18);color:var(--green);}
+.cal-cell.blocked{background:rgba(232,85,85,0.18);color:#f06868;}
 .cal-cell.past{opacity:0.25;pointer-events:none;}
-.cal-cell .cc-dot{position:absolute;bottom:4px;width:4px;height:4px;border-radius:50%;}
+.cal-cell .cc-dot{position:absolute;bottom:5px;width:5px;height:5px;border-radius:50%;}
 .cal-cell.booked .cc-dot{background:var(--green);}
-.cal-cell.blocked .cc-dot{background:var(--red);}
-.cal-month{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
-.cal-month-name{font-family:'Playfair Display',serif;font-size:17px;color:var(--text);}
-.cal-nav{width:34px;height:34px;border-radius:50%;background:var(--card);border:1px solid var(--border2);color:var(--gold);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.cal-cell.blocked .cc-dot{background:#f06868;}
+.cal-month{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+.cal-month-name{font-size:18px;color:var(--text);font-weight:700;}
+.cal-nav{width:38px;height:38px;border-radius:50%;background:var(--tile);color:var(--text);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform 0.1s;}
+.cal-nav:active{transform:scale(0.9);}
 
 /* STATS */
-.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;}
-.stat-card{background:var(--card);border:1px solid var(--border2);border-radius:var(--r);padding:18px 16px;position:relative;overflow:hidden;}
-.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
-.stat-card.gold::before{background:var(--gold);}
-.stat-card.green::before{background:var(--green);}
-.stat-card.blue::before{background:var(--blue);}
-.stat-card.amber::before{background:var(--amber);}
-.stat-icon{font-size:22px;margin-bottom:10px;}
-.stat-num{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;color:var(--text);line-height:1;}
-.stat-lbl{font-size:11px;color:var(--text3);margin-top:6px;letter-spacing:0.3px;}
-
-.stat-wide{background:var(--card);border:1px solid var(--border2);border-radius:var(--r);padding:18px;margin-bottom:12px;}
-.sw-title{font-size:12px;color:var(--gold);letter-spacing:1px;text-transform:uppercase;font-weight:700;margin-bottom:14px;}
-.sw-bar-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
-.sw-bar-label{font-size:12px;color:var(--text2);width:90px;flex-shrink:0;}
-.sw-bar-track{flex:1;height:8px;background:var(--bg);border-radius:4px;overflow:hidden;}
-.sw-bar-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));border-radius:4px;}
-.sw-bar-val{font-size:12px;color:var(--text);font-weight:600;width:30px;text-align:right;}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-bottom:16px;}
+.stat-card{border-radius:var(--r);padding:20px 18px;position:relative;overflow:hidden;background:linear-gradient(160deg,var(--tile-light),var(--tile));border:1px solid var(--border);}
+.stat-icon-c{width:38px;height:38px;border-radius:11px;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;margin-bottom:12px;}
+.stat-icon-c svg{width:20px;height:20px;}
+.stat-num{font-size:30px;font-weight:800;color:var(--text);line-height:1;}
+.stat-lbl{font-size:12px;color:var(--text3);margin-top:7px;}
+.stat-wide{background:linear-gradient(160deg,var(--card2),var(--card));border:1px solid var(--border);border-radius:var(--r);padding:20px;margin-bottom:13px;}
+.sw-title{font-size:13px;color:var(--text2);font-weight:700;margin-bottom:16px;}
+.sw-bar-row{display:flex;align-items:center;gap:11px;margin-bottom:12px;}
+.sw-bar-label{font-size:12px;color:var(--text2);width:95px;flex-shrink:0;}
+.sw-bar-track{flex:1;height:9px;background:rgba(0,0,0,0.3);border-radius:5px;overflow:hidden;}
+.sw-bar-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:5px;transition:width 0.5s;}
+.sw-bar-val{font-size:12px;color:var(--text);font-weight:700;width:32px;text-align:right;}
 
 /* PROFILE PAGE */
-.settings-card{background:var(--card);border:1px solid var(--border2);border-radius:var(--r);padding:4px 16px;margin-bottom:12px;}
-.settings-row{display:flex;align-items:center;gap:13px;padding:15px 0;border-bottom:1px solid var(--border2);cursor:pointer;}
+.settings-card{background:linear-gradient(160deg,var(--card2),var(--card));border:1px solid var(--border);border-radius:var(--r);padding:4px 18px;margin-bottom:13px;}
+.settings-row{display:flex;align-items:center;gap:14px;padding:16px 0;border-bottom:1px solid var(--border);cursor:pointer;}
 .settings-row:last-child{border-bottom:none;}
-.sr-icon{font-size:19px;width:26px;text-align:center;flex-shrink:0;}
+.sr-icon-c{width:38px;height:38px;border-radius:11px;background:rgba(59,143,214,0.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.sr-icon-c svg{width:19px;height:19px;stroke:var(--accent2);}
 .sr-text{flex:1;}
-.sr-title{font-size:14px;color:var(--text);font-weight:500;}
-.sr-sub{font-size:11px;color:var(--text3);margin-top:1px;}
-.sr-arrow{color:var(--text3);font-size:18px;}
+.sr-title{font-size:14px;color:var(--text);font-weight:600;}
+.sr-sub{font-size:12px;color:var(--text3);margin-top:2px;}
+.sr-arrow{color:var(--text3);font-size:20px;}
 
 /* TAB BAR */
-.tab-bar{position:fixed;bottom:0;left:0;right:0;background:var(--bg2);border-top:1px solid var(--border2);display:flex;padding:8px 8px 22px;z-index:100;}
-.tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 4px;cursor:pointer;border-radius:14px;transition:background 0.2s;}
-.tab.active{background:var(--card);}
-.tab-icon{font-size:20px;opacity:0.6;transition:opacity 0.2s;}
-.tab.active .tab-icon{opacity:1;}
-.tab-label{font-size:10px;color:var(--text3);font-weight:600;}
-.tab.active .tab-label{color:var(--gold);}
+.tab-bar{position:fixed;bottom:0;left:0;right:0;background:rgba(14,22,33,0.97);backdrop-filter:blur(14px);border-top:1px solid var(--border);display:flex;padding:9px 8px 24px;z-index:100;}
+.tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;padding:9px 4px;cursor:pointer;border-radius:16px;transition:background 0.2s;}
+.tab.active{background:var(--tile);}
+.tab-icon{width:24px;height:24px;display:flex;align-items:center;justify-content:center;}
+.tab-icon svg{width:23px;height:23px;fill:var(--text3);transition:fill 0.2s;}
+.tab.active .tab-icon svg{fill:var(--accent2);}
+.tab-label{font-size:10px;color:var(--text3);font-weight:600;transition:color 0.2s;}
+.tab.active .tab-label{color:var(--accent2);}
 
-/* LOADER */
-.loader{text-align:center;padding:50px 0;}
-.loader-spin{width:40px;height:40px;border:3px solid var(--border2);border-top-color:var(--gold);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 14px;}
+/* LOADER + TOAST */
+.loader{text-align:center;padding:60px 0;}
+.loader-spin{width:42px;height:42px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 16px;}
 @keyframes spin{to{transform:rotate(360deg);}}
 .loader-text{font-size:13px;color:var(--text3);}
-
-/* TOAST */
-.toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:12px 20px;font-size:13px;color:var(--text);z-index:300;opacity:0;transition:all 0.3s;pointer-events:none;box-shadow:0 8px 24px rgba(0,0,0,0.4);}
+.toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--card2);border:1px solid var(--border);border-radius:14px;padding:13px 22px;font-size:13px;color:var(--text);z-index:300;opacity:0;transition:all 0.3s;pointer-events:none;box-shadow:0 10px 30px rgba(0,0,0,0.5);font-weight:600;}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 </style>
 </head>
@@ -177,21 +206,72 @@ body{font-family:'Raleway',sans-serif;background:var(--bg);color:var(--text);min
     <div class="pf-name">Дядя Ваня</div>
     <div class="pf-sub">Панель управления</div>
   </div>
-  <div class="pf-gear" onclick="switchTab('profile')">⚙️</div>
+  <div class="pf-gear" onclick="switchTab('profile')">
+    <svg viewBox="0 0 24 24"><path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/></svg>
+  </div>
+</div>
+
+<!-- PAGE: DASHBOARD -->
+<div class="page active" id="page-home">
+  <div class="dash">
+    <!-- Левая колонка: 2 большие -->
+    <div class="dash-col">
+      <div class="tile tile-big-h" onclick="switchTab('bookings');setFilterByName('pending')">
+        <div class="tile-wm"><svg viewBox="0 0 60 60" fill="none"><circle cx="30" cy="30" r="20" stroke="#fff" stroke-width="2"/><path d="M30 18v12l8 5" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg></div>
+        <div class="tile-title">Новые<br>заявки</div>
+        <div class="tile-sub">ждут ответа</div>
+        <div class="tile-val" style="color:var(--amber)" id="tile-pending">0</div>
+        <div class="tile-corner"><div class="tile-circle"><svg viewBox="0 0 24 24" fill="none" stroke="#e8a72a" stroke-width="2.2"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/></svg></div></div>
+      </div>
+      <div class="tile tile-big-h deep" onclick="switchTab('calendar')">
+        <div class="tile-wm"><svg viewBox="0 0 60 60" fill="none"><rect x="12" y="14" width="36" height="34" rx="3" stroke="#fff" stroke-width="2"/><path d="M12 24H48M22 9v10M38 9v10" stroke="#fff" stroke-width="2"/></svg></div>
+        <div class="tile-title">Календарь</div>
+        <div class="tile-sub">броней в месяце</div>
+        <div class="tile-val" style="color:var(--accent2)" id="tile-booked">0</div>
+        <div class="tile-corner"><div class="tile-circle"><svg viewBox="0 0 24 24" fill="none" stroke="#3b8fd6" stroke-width="2.2"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v4M16 3v4"/></svg></div></div>
+      </div>
+    </div>
+    <!-- Правая колонка: большая + статистика-широкая -->
+    <div class="dash-col">
+      <div class="tile tile-big-h" onclick="switchTab('bookings');setFilterByName('all')">
+        <div class="tile-wm"><svg viewBox="0 0 60 60" fill="none"><rect x="16" y="10" width="28" height="40" rx="3" stroke="#fff" stroke-width="2"/><path d="M23 22h14M23 30h14M23 38h9" stroke="#fff" stroke-width="2"/></svg></div>
+        <div class="tile-title">Все<br>заявки</div>
+        <div class="tile-sub">за всё время</div>
+        <div class="tile-val" id="tile-total">0</div>
+        <div class="tile-corner"><div class="tile-circle"><svg viewBox="0 0 24 24" fill="none" stroke="#1c2a3d" stroke-width="2.2"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 7h6M9 11h6M9 15h4"/></svg></div></div>
+      </div>
+      <div class="tile tile-sm-h tile-sm" onclick="switchTab('stats')">
+        <div>
+          <div class="tile-title" style="font-size:17px;">Статистика</div>
+          <div class="tile-sub" style="font-size:13px;"><span id="tile-revenue" style="color:var(--green);font-weight:700;">0 ₽</span> доход</div>
+        </div>
+        <div class="tile-icon-r"><svg viewBox="0 0 24 24" fill="none" stroke="#46c178" stroke-width="2"><path d="M3 17l6-6 4 4 8-8"/><path d="M21 7v6M21 7h-6"/></svg></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="promo" onclick="switchTab('bookings');setFilterByName('pending')">
+    <div class="promo-title">Новые заявки ждут!</div>
+    <div class="promo-text">Не упусти клиента — подтверди бронь и свяжись с рыбаком прямо сейчас.</div>
+    <div class="promo-emoji">🐟</div>
+  </div>
+
+  <div class="sec-title">Последние заявки</div>
+  <div id="recent-list">
+    <div class="loader"><div class="loader-spin"></div><div class="loader-text">Загружаем...</div></div>
+  </div>
 </div>
 
 <!-- PAGE: BOOKINGS -->
-<div class="page active" id="page-bookings">
+<div class="page" id="page-bookings">
   <div class="sec-title">Заявки <span class="count" id="bookings-count">0</span></div>
   <div class="filters">
     <button class="filter-btn active" data-filter="all" onclick="setFilter('all',this)">Все</button>
-    <button class="filter-btn" data-filter="pending" onclick="setFilter('pending',this)">🟡 Новые</button>
-    <button class="filter-btn" data-filter="confirmed" onclick="setFilter('confirmed',this)">🟢 Подтверждённые</button>
-    <button class="filter-btn" data-filter="cancelled" onclick="setFilter('cancelled',this)">🔴 Отменённые</button>
+    <button class="filter-btn" data-filter="pending" onclick="setFilter('pending',this)"><span class="fdot" style="background:var(--amber)"></span>Новые</button>
+    <button class="filter-btn" data-filter="confirmed" onclick="setFilter('confirmed',this)"><span class="fdot" style="background:var(--green)"></span>Подтверждённые</button>
+    <button class="filter-btn" data-filter="cancelled" onclick="setFilter('cancelled',this)"><span class="fdot" style="background:var(--red)"></span>Отменённые</button>
   </div>
-  <div id="bookings-list">
-    <div class="loader"><div class="loader-spin"></div><div class="loader-text">Загружаем заявки...</div></div>
-  </div>
+  <div id="bookings-list"></div>
 </div>
 
 <!-- PAGE: CALENDAR -->
@@ -199,8 +279,8 @@ body{font-family:'Raleway',sans-serif;background:var(--bg);color:var(--text);min
   <div class="sec-title">Календарь</div>
   <div class="cal-legend">
     <span><span class="cal-dot" style="background:var(--green);"></span> Бронь</span>
-    <span><span class="cal-dot" style="background:var(--red);"></span> Заблокировано</span>
-    <span><span class="cal-dot" style="background:var(--card);border:1px solid var(--border2);"></span> Свободно</span>
+    <span><span class="cal-dot" style="background:#f06868;"></span> Заблокировано</span>
+    <span><span class="cal-dot" style="background:var(--tile);"></span> Свободно</span>
   </div>
   <div class="cal-month">
     <div class="cal-nav" onclick="changeMonth(-1)">‹</div>
@@ -208,66 +288,54 @@ body{font-family:'Raleway',sans-serif;background:var(--bg);color:var(--text);min
     <div class="cal-nav" onclick="changeMonth(1)">›</div>
   </div>
   <div class="cal-grid" id="cal-grid"></div>
-  <div style="font-size:12px;color:var(--text3);text-align:center;margin-top:16px;line-height:1.6;">Нажмите на свободный день чтобы заблокировать его<br>(например для своего выезда или отдыха)</div>
+  <div style="font-size:12px;color:var(--text3);text-align:center;margin-top:18px;line-height:1.6;">Нажмите на свободный день чтобы заблокировать его<br>(например для своего выезда или отдыха)</div>
 </div>
 
 <!-- PAGE: STATS -->
 <div class="page" id="page-stats">
   <div class="sec-title">Статистика</div>
   <div class="stats-grid">
-    <div class="stat-card gold"><div class="stat-icon">📋</div><div class="stat-num" id="st-total">0</div><div class="stat-lbl">Всего заявок</div></div>
-    <div class="stat-card green"><div class="stat-icon">✅</div><div class="stat-num" id="st-confirmed">0</div><div class="stat-lbl">Подтверждено</div></div>
-    <div class="stat-card blue"><div class="stat-icon">💰</div><div class="stat-num" id="st-revenue">0</div><div class="stat-lbl">Доход (подтв.), ₽</div></div>
-    <div class="stat-card amber"><div class="stat-icon">⏳</div><div class="stat-num" id="st-pending">0</div><div class="stat-lbl">Ждут ответа</div></div>
+    <div class="stat-card"><div class="stat-icon-c"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 7h6M9 11h6"/></svg></div><div class="stat-num" id="st-total">0</div><div class="stat-lbl">Всего заявок</div></div>
+    <div class="stat-card"><div class="stat-icon-c"><svg viewBox="0 0 24 24" fill="none" stroke="#46c178" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg></div><div class="stat-num" id="st-confirmed">0</div><div class="stat-lbl">Подтверждено</div></div>
+    <div class="stat-card"><div class="stat-icon-c"><svg viewBox="0 0 24 24" fill="none" stroke="#e2b93b" stroke-width="2"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div><div class="stat-num" id="st-revenue" style="font-size:22px;">0</div><div class="stat-lbl">Доход (подтв.), ₽</div></div>
+    <div class="stat-card"><div class="stat-icon-c"><svg viewBox="0 0 24 24" fill="none" stroke="#e8a72a" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div><div class="stat-num" id="st-pending">0</div><div class="stat-lbl">Ждут ответа</div></div>
   </div>
-  <div class="stat-wide">
-    <div class="sw-title">Популярные доп. услуги</div>
-    <div id="st-extras"></div>
-  </div>
-  <div class="stat-wide">
-    <div class="sw-title">Источники клиентов</div>
-    <div id="st-sources"></div>
-  </div>
+  <div class="stat-wide"><div class="sw-title">Популярные доп. услуги</div><div id="st-extras"></div></div>
+  <div class="stat-wide"><div class="sw-title">Источники клиентов</div><div id="st-sources"></div></div>
 </div>
 
 <!-- PAGE: PROFILE -->
 <div class="page" id="page-profile">
   <div class="sec-title">Профиль</div>
   <div class="settings-card">
-    <div class="settings-row"><div class="sr-icon">📞</div><div class="sr-text"><div class="sr-title">Телефон</div><div class="sr-sub">+7 995 692-60-86</div></div></div>
-    <div class="settings-row"><div class="sr-icon">📧</div><div class="sr-text"><div class="sr-title">Email</div><div class="sr-sub">gidfishpro@yandex.ru</div></div></div>
-    <div class="settings-row"><div class="sr-icon">💙</div><div class="sr-text"><div class="sr-title">Группа ВК</div><div class="sr-sub">@gidfishpro</div></div></div>
+    <div class="settings-row"><div class="sr-icon-c"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.13.96.36 1.9.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0122 16.92z"/></svg></div><div class="sr-text"><div class="sr-title">Телефон</div><div class="sr-sub">+7 995 692-60-86</div></div></div>
+    <div class="settings-row"><div class="sr-icon-c"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 7l-10 5L2 7"/></svg></div><div class="sr-text"><div class="sr-title">Email</div><div class="sr-sub">gidfishpro@yandex.ru</div></div></div>
+    <div class="settings-row"><div class="sr-icon-c"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 12h8M12 8v8"/></svg></div><div class="sr-text"><div class="sr-title">Группа ВК</div><div class="sr-sub">@gidfishpro</div></div></div>
   </div>
   <div class="settings-card">
-    <div class="settings-row" onclick="loadAll()"><div class="sr-icon">🔄</div><div class="sr-text"><div class="sr-title">Обновить данные</div><div class="sr-sub">Перезагрузить заявки из базы</div></div><div class="sr-arrow">›</div></div>
-    <div class="settings-row"><div class="sr-icon">💰</div><div class="sr-text"><div class="sr-title">Базовая цена</div><div class="sr-sub">9 000 ₽ за выезд</div></div></div>
+    <div class="settings-row" onclick="loadAll()"><div class="sr-icon-c"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg></div><div class="sr-text"><div class="sr-title">Обновить данные</div><div class="sr-sub">Перезагрузить из базы</div></div><div class="sr-arrow">›</div></div>
+    <div class="settings-row"><div class="sr-icon-c"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div><div class="sr-text"><div class="sr-title">Базовая цена</div><div class="sr-sub">9 000 ₽ за выезд</div></div></div>
   </div>
-  <div style="text-align:center;font-size:11px;color:var(--text3);margin-top:20px;line-height:1.6;">Охота и рыбалка с Дядей Ваней<br>Плещеево озеро · Переславль-Залесский</div>
+  <div style="text-align:center;font-size:11px;color:var(--text3);margin-top:22px;line-height:1.6;">Охота и рыбалка с Дядей Ваней<br>Плещеево озеро · Переславль-Залесский</div>
 </div>
 
 <!-- MODAL -->
 <div class="modal-overlay" id="modal-overlay" onclick="closeModalOnBg(event)">
-  <div class="modal" id="modal">
-    <div class="modal-handle"></div>
-    <div id="modal-content"></div>
-  </div>
+  <div class="modal" id="modal"><div class="modal-handle"></div><div id="modal-content"></div></div>
 </div>
-
-<!-- TOAST -->
 <div class="toast" id="toast"></div>
 
 <!-- TAB BAR -->
 <div class="tab-bar">
-  <div class="tab active" id="tab-bookings" onclick="switchTab('bookings')"><div class="tab-icon">📋</div><div class="tab-label">Заявки</div></div>
-  <div class="tab" id="tab-calendar" onclick="switchTab('calendar')"><div class="tab-icon">📅</div><div class="tab-label">Календарь</div></div>
-  <div class="tab" id="tab-stats" onclick="switchTab('stats')"><div class="tab-icon">📊</div><div class="tab-label">Статистика</div></div>
-  <div class="tab" id="tab-profile" onclick="switchTab('profile')"><div class="tab-icon">👤</div><div class="tab-label">Профиль</div></div>
+  <div class="tab active" id="tab-home" onclick="switchTab('home')"><div class="tab-icon"><svg viewBox="0 0 24 24"><path d="M12 3l9 8h-2v9h-5v-6h-4v6H5v-9H3z"/></svg></div><div class="tab-label">Главная</div></div>
+  <div class="tab" id="tab-bookings" onclick="switchTab('bookings')"><div class="tab-icon"><svg viewBox="0 0 24 24"><path d="M6 2a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V4a2 2 0 00-2-2zm3 5h6v2H9zm0 4h6v2H9zm0 4h4v2H9z"/></svg></div><div class="tab-label">Заявки</div></div>
+  <div class="tab" id="tab-calendar" onclick="switchTab('calendar')"><div class="tab-icon"><svg viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V6a2 2 0 00-2-2zm0 16H5V10h14z"/></svg></div><div class="tab-label">Календарь</div></div>
+  <div class="tab" id="tab-stats" onclick="switchTab('stats')"><div class="tab-icon"><svg viewBox="0 0 24 24"><path d="M5 9.2h3V19H5zM10.6 5h2.8v14h-2.8zm5.6 8H19v6h-2.8z"/></svg></div><div class="tab-label">Статистика</div></div>
+  <div class="tab" id="tab-profile" onclick="switchTab('profile')"><div class="tab-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M12 14c-5 0-8 2.5-8 5v1h16v-1c0-2.5-3-5-8-5z"/></svg></div><div class="tab-label">Профиль</div></div>
 </div>
 
 <script>
 const FIREBASE_URL = 'https://fishing-dyadvanya-default-rtdb.europe-west1.firebasedatabase.app';
-const TG_TOKEN = '8284884619:AAEWhlsFmU673z2g6JGUQIT5DIuP4L9RUjk';
-
 const tg = window.Telegram ? window.Telegram.WebApp : null;
 if (tg) { tg.ready(); tg.expand(); }
 
@@ -275,13 +343,11 @@ const monthsFull=['января','февраля','марта','апреля','�
 const monthsNom=['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
 const extraLabels={kitchild:'Детский набор',kitadult:'Взрослый набор',smoke:'Копчение улова',tent:'Палатка',clean:'Чистка улова',masterclass:'Мастер-класс',photosession:'Фотосессия',delivery:'Доставка улова'};
 const sourceLabels={vk:'ВКонтакте',friends:'От друзей',search:'Поисковик',youtube:'YouTube',other:'Другое'};
+const statusText={pending:'Новая',confirmed:'Подтверждена',cancelled:'Отменена'};
+const tMap={boat:'🚤 С лодки',shore:'🏕️ С берега'};
 
-let allBookings=[];
-let blockedDates={};
-let currentFilter='all';
-let currentBooking=null;
-let calMonth=new Date().getMonth();
-let calYear=new Date().getFullYear();
+let allBookings=[],blockedDates={},currentFilter='all',currentBooking=null;
+let calMonth=new Date().getMonth(),calYear=new Date().getFullYear();
 
 function switchTab(tab){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
@@ -291,6 +357,7 @@ function switchTab(tab){
   window.scrollTo({top:0,behavior:'smooth'});
   if(tab==='calendar')renderCalendar();
   if(tab==='stats')renderStats();
+  if(tab==='home')renderDashboard();
 }
 
 function loadAll(){
@@ -299,210 +366,94 @@ function loadAll(){
     fetch(FIREBASE_URL+'/blocked.json').then(r=>r.json())
   ]).then(([bookings,blocked])=>{
     allBookings=[];
-    if(bookings){
-      Object.entries(bookings).forEach(([id,b])=>{
-        allBookings.push({...b,_id:id});
-      });
-    }
+    if(bookings)Object.entries(bookings).forEach(([id,b])=>allBookings.push({...b,_id:id}));
     allBookings.sort((a,b)=>(b.createdAt||'').localeCompare(a.createdAt||''));
     blockedDates=blocked||{};
-    renderBookings();
-    showToast('Данные обновлены');
-  }).catch(()=>{
-    document.getElementById('bookings-list').innerHTML='<div class="empty-state"><div class="es-icon">⚠️</div><div class="es-text">Ошибка загрузки. Проверьте интернет.</div></div>';
-  });
+    renderBookings();renderDashboard();showToast('Данные обновлены');
+  }).catch(()=>{document.getElementById('recent-list').innerHTML='<div class="empty-state"><div class="es-icon">⚠️</div><div class="es-text">Ошибка загрузки</div></div>';});
 }
 
-function setFilter(f,btn){
-  currentFilter=f;
-  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  renderBookings();
+function renderDashboard(){
+  const total=allBookings.length;
+  const pending=allBookings.filter(b=>(b.status||'pending')==='pending').length;
+  const confirmed=allBookings.filter(b=>b.status==='confirmed');
+  const revenue=confirmed.reduce((s,b)=>s+(b.total||0),0);
+  const bookedThisMonth=allBookings.filter(b=>b.status!=='cancelled'&&b.date&&b.date.includes(monthsFull[calMonth])).length;
+  document.getElementById('tile-pending').textContent=pending;
+  document.getElementById('tile-revenue').textContent=revenue>=1000?(Math.round(revenue/1000)+'к ₽'):(revenue+' ₽');
+  document.getElementById('tile-booked').textContent=bookedThisMonth;
+  document.getElementById('tile-total').textContent=total;
+  const recent=allBookings.slice(0,3);
+  const list=document.getElementById('recent-list');
+  list.innerHTML=recent.length?recent.map(renderCard).join(''):'<div class="empty-state"><div class="es-icon">🎣</div><div class="es-text">Заявок пока нет</div></div>';
+}
+
+function setFilter(f,btn){currentFilter=f;document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');renderBookings();}
+function setFilterByName(f){currentFilter=f;document.querySelectorAll('.filter-btn').forEach(b=>b.classList.toggle('active',b.dataset.filter===f));renderBookings();}
+
+function renderCard(b){
+  const status=b.status||'pending';
+  return `<div class="booking-card" onclick='openBooking("${b._id}")'>
+    <div class="bc-status-bar ${status}"></div>
+    <div class="bc-head"><div><div class="bc-name">${b.name||'Без имени'}</div><div class="bc-phone">${b.phone||''}</div></div><div class="bc-status ${status}">${statusText[status]}</div></div>
+    <div class="bc-details"><div class="bc-chip">📅 ${b.date||'—'}</div><div class="bc-chip">⏰ ${b.timeFrom||''}—${b.timeTo||''}</div><div class="bc-chip">👥 ${b.people||1} чел.</div><div class="bc-chip">${tMap[b.fishType]||''}</div></div>
+    <div class="bc-footer"><div class="bc-total">${(b.total||9000).toLocaleString('ru')} ₽</div><div class="bc-date-created">${formatCreated(b.createdAt)}</div></div>
+  </div>`;
 }
 
 function renderBookings(){
   const list=document.getElementById('bookings-list');
-  let filtered=allBookings;
-  if(currentFilter!=='all')filtered=allBookings.filter(b=>(b.status||'pending')===currentFilter);
-  
+  let filtered=currentFilter==='all'?allBookings:allBookings.filter(b=>(b.status||'pending')===currentFilter);
   document.getElementById('bookings-count').textContent=filtered.length;
-
-  if(filtered.length===0){
-    list.innerHTML='<div class="empty-state"><div class="es-icon">🎣</div><div class="es-text">Заявок пока нет</div></div>';
-    return;
-  }
-
-  list.innerHTML=filtered.map(b=>{
-    const status=b.status||'pending';
-    const statusText={pending:'Новая',confirmed:'Подтверждена',cancelled:'Отменена'}[status];
-    const tMap={boat:'🚤 С лодки',shore:'🏕️ С берега'};
-    return `<div class="booking-card" onclick='openBooking("${b._id}")'>
-      <div class="bc-status-bar ${status}"></div>
-      <div class="bc-head">
-        <div><div class="bc-name">${b.name||'Без имени'}</div><div class="bc-phone">${b.phone||''}</div></div>
-        <div class="bc-status ${status}">${statusText}</div>
-      </div>
-      <div class="bc-details">
-        <div class="bc-chip">📅 ${b.date||'—'}</div>
-        <div class="bc-chip">⏰ ${b.timeFrom||''}—${b.timeTo||''}</div>
-        <div class="bc-chip">👥 ${b.people||1} чел.</div>
-        <div class="bc-chip">${tMap[b.fishType]||''}</div>
-      </div>
-      <div class="bc-footer">
-        <div class="bc-total">${(b.total||9000).toLocaleString('ru')} ₽</div>
-        <div class="bc-date-created">${formatCreated(b.createdAt)}</div>
-      </div>
-    </div>`;
-  }).join('');
+  list.innerHTML=filtered.length?filtered.map(renderCard).join(''):'<div class="empty-state"><div class="es-icon">🎣</div><div class="es-text">Заявок нет</div></div>';
 }
 
-function formatCreated(iso){
-  if(!iso)return '';
-  const d=new Date(iso);
-  return `${d.getDate()} ${monthsFull[d.getMonth()]}, ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
-}
+function formatCreated(iso){if(!iso)return '';const d=new Date(iso);return `${d.getDate()} ${monthsFull[d.getMonth()]}, ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;}
 
 function openBooking(id){
-  const b=allBookings.find(x=>x._id===id);
-  if(!b)return;
-  currentBooking=b;
+  const b=allBookings.find(x=>x._id===id);if(!b)return;currentBooking=b;
   const status=b.status||'pending';
-  const tMap={boat:'🚤 С лодки',shore:'🏕️ С берега'};
-  
-  let extrasHtml='';
-  for(const[k,label]of Object.entries(extraLabels)){
-    if(b[k]>0)extrasHtml+=`<div class="md-row"><span class="md-lbl">${label}</span><span class="md-val">${b[k]} шт.</span></div>`;
-  }
-
-  const phone=(b.phone||'').replace(/[^0-9+]/g,'');
-  const phoneClean=phone.startsWith('+')?phone:('+'+phone.replace(/^8/,'7'));
-
+  let extrasHtml='';for(const[k,label]of Object.entries(extraLabels)){if(b[k]>0)extrasHtml+=`<div class="md-row"><span class="md-lbl">${label}</span><span class="md-val">${b[k]} шт.</span></div>`;}
+  const phone=(b.phone||'').replace(/[^0-9+]/g,'');const phoneClean=phone.startsWith('+')?phone:('+'+phone.replace(/^8/,'7'));
   let actionsHtml='';
-  if(status==='pending'){
-    actionsHtml=`
-      <div class="action-grid">
-        <button class="act-btn act-confirm" onclick="updateStatus('confirmed')">✅ Подтвердить</button>
-        <button class="act-btn act-cancel" onclick="updateStatus('cancelled')">❌ Отменить</button>
-        <button class="act-btn act-move act-full" onclick="moveBooking()">📅 Перенести на другую дату</button>
-        <a class="act-btn act-call" href="tel:${phoneClean}">📞 Позвонить</a>
-        <a class="act-btn act-wa" href="https://wa.me/${phoneClean.replace('+','')}" target="_blank">💬 WhatsApp</a>
-      </div>`;
-  } else if(status==='confirmed'){
-    actionsHtml=`
-      <div class="action-grid">
-        <button class="act-btn act-cancel act-full" onclick="updateStatus('cancelled')">❌ Отменить бронь</button>
-        <a class="act-btn act-call" href="tel:${phoneClean}">📞 Позвонить</a>
-        <a class="act-btn act-wa" href="https://wa.me/${phoneClean.replace('+','')}" target="_blank">💬 WhatsApp</a>
-      </div>`;
-  } else {
-    actionsHtml=`
-      <div class="action-grid">
-        <button class="act-btn act-confirm act-full" onclick="updateStatus('confirmed')">↩️ Восстановить (подтвердить)</button>
-        <a class="act-btn act-call" href="tel:${phoneClean}">📞 Позвонить</a>
-        <a class="act-btn act-wa" href="https://wa.me/${phoneClean.replace('+','')}" target="_blank">💬 WhatsApp</a>
-      </div>`;
-  }
-
-  document.getElementById('modal-content').innerHTML=`
-    <div class="modal-title">${b.name||'Без имени'}</div>
-    <div class="modal-sub">${b.phone||''} · заявка от ${formatCreated(b.createdAt)}</div>
-    <div class="md-section">
-      <div class="md-row"><span class="md-lbl">Статус</span><span class="md-val"><span class="bc-status ${status}">${({pending:'Новая',confirmed:'Подтверждена',cancelled:'Отменена'})[status]}</span></span></div>
-      <div class="md-row"><span class="md-lbl">Дата</span><span class="md-val">${b.date||'—'}</span></div>
-      <div class="md-row"><span class="md-lbl">Время</span><span class="md-val">${b.timeFrom||''} — ${b.timeTo||''}</span></div>
-      <div class="md-row"><span class="md-lbl">Тип рыбалки</span><span class="md-val">${tMap[b.fishType]||'—'}</span></div>
-      <div class="md-row"><span class="md-lbl">Человек</span><span class="md-val">${b.people||1}</span></div>
-      <div class="md-row"><span class="md-lbl">Источник</span><span class="md-val">${sourceLabels[b.source]||'—'}</span></div>
-    </div>
-    ${extrasHtml?`<div class="md-section">${extrasHtml}</div>`:''}
-    <div class="md-section">
-      <div class="md-total"><span class="md-lbl" style="font-size:15px;font-weight:600;color:var(--text);">Итого</span><span class="v">${(b.total||9000).toLocaleString('ru')} ₽</span></div>
-    </div>
-    ${actionsHtml}`;
-  
+  if(status==='pending'){actionsHtml=`<div class="action-grid"><button class="act-btn act-confirm" onclick="updateStatus('confirmed')">✅ Подтвердить</button><button class="act-btn act-cancel" onclick="updateStatus('cancelled')">❌ Отменить</button><button class="act-btn act-move act-full" onclick="moveBooking()">📅 Перенести на другую дату</button><a class="act-btn act-call" href="tel:${phoneClean}">📞 Позвонить</a><a class="act-btn act-wa" href="https://wa.me/${phoneClean.replace('+','')}" target="_blank">💬 WhatsApp</a></div>`;}
+  else if(status==='confirmed'){actionsHtml=`<div class="action-grid"><button class="act-btn act-cancel act-full" onclick="updateStatus('cancelled')">❌ Отменить бронь</button><a class="act-btn act-call" href="tel:${phoneClean}">📞 Позвонить</a><a class="act-btn act-wa" href="https://wa.me/${phoneClean.replace('+','')}" target="_blank">💬 WhatsApp</a></div>`;}
+  else{actionsHtml=`<div class="action-grid"><button class="act-btn act-confirm act-full" onclick="updateStatus('confirmed')">↩️ Восстановить</button><a class="act-btn act-call" href="tel:${phoneClean}">📞 Позвонить</a><a class="act-btn act-wa" href="https://wa.me/${phoneClean.replace('+','')}" target="_blank">💬 WhatsApp</a></div>`;}
+  document.getElementById('modal-content').innerHTML=`<div class="modal-title">${b.name||'Без имени'}</div><div class="modal-sub">${b.phone||''} · заявка от ${formatCreated(b.createdAt)}</div><div class="md-section"><div class="md-row"><span class="md-lbl">Статус</span><span class="md-val"><span class="bc-status ${status}">${statusText[status]}</span></span></div><div class="md-row"><span class="md-lbl">Дата</span><span class="md-val">${b.date||'—'}</span></div><div class="md-row"><span class="md-lbl">Время</span><span class="md-val">${b.timeFrom||''} — ${b.timeTo||''}</span></div><div class="md-row"><span class="md-lbl">Тип рыбалки</span><span class="md-val">${tMap[b.fishType]||'—'}</span></div><div class="md-row"><span class="md-lbl">Человек</span><span class="md-val">${b.people||1}</span></div><div class="md-row"><span class="md-lbl">Источник</span><span class="md-val">${sourceLabels[b.source]||'—'}</span></div></div>${extrasHtml?`<div class="md-section">${extrasHtml}</div>`:''}<div class="md-section"><div class="md-total"><span class="md-lbl" style="font-size:15px;font-weight:600;color:var(--text);">Итого</span><span class="v">${(b.total||9000).toLocaleString('ru')} ₽</span></div></div>${actionsHtml}`;
   document.getElementById('modal-overlay').classList.add('show');
 }
 
-function closeModal(){
-  document.getElementById('modal-overlay').classList.remove('show');
-  currentBooking=null;
-}
-function closeModalOnBg(e){
-  if(e.target.id==='modal-overlay')closeModal();
-}
+function closeModal(){document.getElementById('modal-overlay').classList.remove('show');currentBooking=null;}
+function closeModalOnBg(e){if(e.target.id==='modal-overlay')closeModal();}
 
 function updateStatus(newStatus){
-  if(!currentBooking)return;
-  const id=currentBooking._id;
-  fetch(FIREBASE_URL+'/bookings/'+id+'/status.json',{
-    method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(newStatus)
-  }).then(()=>{
-    currentBooking.status=newStatus;
-    const idx=allBookings.findIndex(x=>x._id===id);
-    if(idx>=0)allBookings[idx].status=newStatus;
-    closeModal();
-    renderBookings();
-    const txt={confirmed:'Бронь подтверждена ✅',cancelled:'Бронь отменена ❌'}[newStatus];
-    showToast(txt);
-    if(tg&&tg.HapticFeedback)tg.HapticFeedback.notificationOccurred('success');
-  }).catch(()=>showToast('Ошибка. Попробуйте ещё раз'));
+  if(!currentBooking)return;const id=currentBooking._id;
+  fetch(FIREBASE_URL+'/bookings/'+id+'/status.json',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(newStatus)})
+  .then(()=>{currentBooking.status=newStatus;const idx=allBookings.findIndex(x=>x._id===id);if(idx>=0)allBookings[idx].status=newStatus;closeModal();renderBookings();renderDashboard();showToast({confirmed:'Бронь подтверждена ✅',cancelled:'Бронь отменена ❌'}[newStatus]);if(tg&&tg.HapticFeedback)tg.HapticFeedback.notificationOccurred('success');})
+  .catch(()=>showToast('Ошибка. Попробуйте ещё раз'));
 }
 
 function moveBooking(){
-  if(!currentBooking)return;
-  const newDate=prompt('Введите новую дату (например: 15 июня):',currentBooking.date);
-  if(!newDate)return;
-  const id=currentBooking._id;
-  fetch(FIREBASE_URL+'/bookings/'+id+'/date.json',{
-    method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(newDate)
-  }).then(()=>{
-    currentBooking.date=newDate;
-    const idx=allBookings.findIndex(x=>x._id===id);
-    if(idx>=0)allBookings[idx].date=newDate;
-    closeModal();
-    renderBookings();
-    showToast('Дата изменена на '+newDate);
-  }).catch(()=>showToast('Ошибка переноса'));
+  if(!currentBooking)return;const newDate=prompt('Введите новую дату (например: 15 июня):',currentBooking.date);if(!newDate)return;const id=currentBooking._id;
+  fetch(FIREBASE_URL+'/bookings/'+id+'/date.json',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(newDate)})
+  .then(()=>{currentBooking.date=newDate;const idx=allBookings.findIndex(x=>x._id===id);if(idx>=0)allBookings[idx].date=newDate;closeModal();renderBookings();showToast('Дата изменена на '+newDate);})
+  .catch(()=>showToast('Ошибка переноса'));
 }
 
-// CALENDAR
-function changeMonth(delta){
-  calMonth+=delta;
-  if(calMonth>11){calMonth=0;calYear++;}
-  if(calMonth<0){calMonth=11;calYear--;}
-  renderCalendar();
-}
+function changeMonth(d){calMonth+=d;if(calMonth>11){calMonth=0;calYear++;}if(calMonth<0){calMonth=11;calYear--;}renderCalendar();}
 
 function renderCalendar(){
   document.getElementById('cal-month-name').textContent=monthsNom[calMonth]+' '+calYear;
-  const grid=document.getElementById('cal-grid');
-  const days=['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
+  const grid=document.getElementById('cal-grid');const days=['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
   let html=days.map(d=>`<div class="cal-head">${d}</div>`).join('');
-  
-  const firstDay=new Date(calYear,calMonth,1);
-  let startOffset=firstDay.getDay()-1;
-  if(startOffset<0)startOffset=6;
-  const daysInMonth=new Date(calYear,calMonth+1,0).getDate();
-  const today=new Date();today.setHours(0,0,0,0);
-
-  // Собираем занятые даты из броней
-  const bookedLabels={};
-  allBookings.forEach(b=>{
-    if(b.status!=='cancelled'&&b.date)bookedLabels[b.date]=true;
-  });
-
+  const firstDay=new Date(calYear,calMonth,1);let startOffset=firstDay.getDay()-1;if(startOffset<0)startOffset=6;
+  const daysInMonth=new Date(calYear,calMonth+1,0).getDate();const today=new Date();today.setHours(0,0,0,0);
+  const bookedLabels={};allBookings.forEach(b=>{if(b.status!=='cancelled'&&b.date)bookedLabels[b.date]=true;});
   for(let i=0;i<startOffset;i++)html+='<div class="cal-cell empty"></div>';
-  
   for(let day=1;day<=daysInMonth;day++){
-    const d=new Date(calYear,calMonth,day);
-    const dateLabel=`${day} ${monthsFull[calMonth]}`;
-    const isPast=d<today;
-    const isBooked=bookedLabels[dateLabel];
-    const isBlocked=blockedDates[dateLabel];
-    let cls='cal-cell';
-    if(isPast)cls+=' past';
-    else if(isBooked)cls+=' booked';
-    else if(isBlocked)cls+=' blocked';
+    const d=new Date(calYear,calMonth,day);const dateLabel=`${day} ${monthsFull[calMonth]}`;
+    const isPast=d<today;const isBooked=bookedLabels[dateLabel];const isBlocked=blockedDates[dateLabel];
+    let cls='cal-cell';if(isPast)cls+=' past';else if(isBooked)cls+=' booked';else if(isBlocked)cls+=' blocked';
     html+=`<div class="${cls}" onclick="toggleBlock('${dateLabel}',${isBooked?'true':'false'})">${day}${(isBooked||isBlocked)?'<div class="cc-dot"></div>':''}</div>`;
   }
   grid.innerHTML=html;
@@ -510,70 +461,22 @@ function renderCalendar(){
 
 function toggleBlock(dateLabel,isBooked){
   if(isBooked){showToast('На эту дату есть бронь');return;}
-  const isBlocked=blockedDates[dateLabel];
-  if(isBlocked){
-    fetch(FIREBASE_URL+'/blocked/'+encodeURIComponent(dateLabel)+'.json',{method:'DELETE'})
-      .then(()=>{delete blockedDates[dateLabel];renderCalendar();showToast('Дата разблокирована');});
-  } else {
-    fetch(FIREBASE_URL+'/blocked/'+encodeURIComponent(dateLabel)+'.json',{
-      method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(true)
-    }).then(()=>{blockedDates[dateLabel]=true;renderCalendar();showToast('Дата заблокирована');});
-  }
+  if(blockedDates[dateLabel]){fetch(FIREBASE_URL+'/blocked/'+encodeURIComponent(dateLabel)+'.json',{method:'DELETE'}).then(()=>{delete blockedDates[dateLabel];renderCalendar();showToast('Дата разблокирована');});}
+  else{fetch(FIREBASE_URL+'/blocked/'+encodeURIComponent(dateLabel)+'.json',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(true)}).then(()=>{blockedDates[dateLabel]=true;renderCalendar();showToast('Дата заблокирована');});}
 }
 
-// STATS
 function renderStats(){
-  const total=allBookings.length;
-  const confirmed=allBookings.filter(b=>b.status==='confirmed');
-  const pending=allBookings.filter(b=>(b.status||'pending')==='pending');
-  const revenue=confirmed.reduce((s,b)=>s+(b.total||0),0);
-
-  document.getElementById('st-total').textContent=total;
-  document.getElementById('st-confirmed').textContent=confirmed.length;
-  document.getElementById('st-revenue').textContent=revenue.toLocaleString('ru');
-  document.getElementById('st-pending').textContent=pending.length;
-
-  // Доп услуги
-  const extraCounts={};
-  allBookings.forEach(b=>{
-    for(const k of Object.keys(extraLabels)){
-      if(b[k]>0)extraCounts[k]=(extraCounts[k]||0)+b[k];
-    }
-  });
-  const maxExtra=Math.max(1,...Object.values(extraCounts));
-  let extrasHtml='';
-  const sortedExtras=Object.entries(extraCounts).sort((a,b)=>b[1]-a[1]);
-  if(sortedExtras.length===0){
-    extrasHtml='<div style="font-size:12px;color:var(--text3);text-align:center;padding:10px;">Пока нет данных</div>';
-  } else {
-    sortedExtras.forEach(([k,v])=>{
-      extrasHtml+=`<div class="sw-bar-row"><div class="sw-bar-label">${extraLabels[k]}</div><div class="sw-bar-track"><div class="sw-bar-fill" style="width:${v/maxExtra*100}%"></div></div><div class="sw-bar-val">${v}</div></div>`;
-    });
-  }
-  document.getElementById('st-extras').innerHTML=extrasHtml;
-
-  // Источники
-  const srcCounts={};
-  allBookings.forEach(b=>{if(b.source)srcCounts[b.source]=(srcCounts[b.source]||0)+1;});
-  const maxSrc=Math.max(1,...Object.values(srcCounts));
-  let srcHtml='';
-  const sortedSrc=Object.entries(srcCounts).sort((a,b)=>b[1]-a[1]);
-  if(sortedSrc.length===0){
-    srcHtml='<div style="font-size:12px;color:var(--text3);text-align:center;padding:10px;">Пока нет данных</div>';
-  } else {
-    sortedSrc.forEach(([k,v])=>{
-      srcHtml+=`<div class="sw-bar-row"><div class="sw-bar-label">${sourceLabels[k]||k}</div><div class="sw-bar-track"><div class="sw-bar-fill" style="width:${v/maxSrc*100}%"></div></div><div class="sw-bar-val">${v}</div></div>`;
-    });
-  }
-  document.getElementById('st-sources').innerHTML=srcHtml;
+  const total=allBookings.length;const confirmed=allBookings.filter(b=>b.status==='confirmed');const pending=allBookings.filter(b=>(b.status||'pending')==='pending');const revenue=confirmed.reduce((s,b)=>s+(b.total||0),0);
+  document.getElementById('st-total').textContent=total;document.getElementById('st-confirmed').textContent=confirmed.length;document.getElementById('st-revenue').textContent=revenue.toLocaleString('ru');document.getElementById('st-pending').textContent=pending.length;
+  const extraCounts={};allBookings.forEach(b=>{for(const k of Object.keys(extraLabels)){if(b[k]>0)extraCounts[k]=(extraCounts[k]||0)+b[k];}});
+  const maxExtra=Math.max(1,...Object.values(extraCounts));const sortedExtras=Object.entries(extraCounts).sort((a,b)=>b[1]-a[1]);
+  document.getElementById('st-extras').innerHTML=sortedExtras.length?sortedExtras.map(([k,v])=>`<div class="sw-bar-row"><div class="sw-bar-label">${extraLabels[k]}</div><div class="sw-bar-track"><div class="sw-bar-fill" style="width:${v/maxExtra*100}%"></div></div><div class="sw-bar-val">${v}</div></div>`).join(''):'<div style="font-size:12px;color:var(--text3);text-align:center;padding:10px;">Пока нет данных</div>';
+  const srcCounts={};allBookings.forEach(b=>{if(b.source)srcCounts[b.source]=(srcCounts[b.source]||0)+1;});
+  const maxSrc=Math.max(1,...Object.values(srcCounts));const sortedSrc=Object.entries(srcCounts).sort((a,b)=>b[1]-a[1]);
+  document.getElementById('st-sources').innerHTML=sortedSrc.length?sortedSrc.map(([k,v])=>`<div class="sw-bar-row"><div class="sw-bar-label">${sourceLabels[k]||k}</div><div class="sw-bar-track"><div class="sw-bar-fill" style="width:${v/maxSrc*100}%"></div></div><div class="sw-bar-val">${v}</div></div>`).join(''):'<div style="font-size:12px;color:var(--text3);text-align:center;padding:10px;">Пока нет данных</div>';
 }
 
-function showToast(msg){
-  const t=document.getElementById('toast');
-  t.textContent=msg;
-  t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),2200);
-}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200);}
 
 loadAll();
 </script>
