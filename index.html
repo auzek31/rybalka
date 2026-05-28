@@ -291,9 +291,67 @@ body{font-family:'Raleway',sans-serif;background:var(--bg);color:var(--text);min
 .s-title{font-family:'Playfair Display',serif;font-size:24px;color:var(--text);margin-bottom:10px;}
 .s-sub{font-size:13px;color:var(--text2);line-height:1.75;}
 .s-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:16px;margin:20px 0;text-align:left;}
+
+/* GRAIN TEXTURE */
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;opacity:0.028;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");background-size:300px 300px;}
+.app-header,.nav,.page,.splash,.sending-overlay{position:relative;z-index:1;}
+
+/* DECORATIVE DIVIDER */
+.sec-divider{width:100%;height:16px;display:flex;align-items:center;gap:10px;margin:4px 0 16px;opacity:0.3;}
+.sec-divider::before,.sec-divider::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gold));}
+.sec-divider::after{background:linear-gradient(90deg,var(--gold),transparent);}
+.sec-divider span{color:var(--gold);font-size:10px;flex-shrink:0;}
+
+/* ENHANCED INFO CARD */
+.info-card{background:var(--card);border:1px solid var(--border2);border-left:3px solid var(--gold);border-radius:var(--r);padding:16px;margin-bottom:12px;transition:border-color 0.2s,box-shadow 0.2s;box-shadow:0 2px 8px rgba(0,0,0,0.2);}
+.info-card:hover{border-color:var(--border);box-shadow:0 4px 16px rgba(0,0,0,0.3),0 0 0 1px rgba(201,162,39,0.1);}
+
+/* HERO ANIMATIONS */
+.hero-title{animation:heroFadeIn 0.6s ease both;}
+.hero-desc{animation:heroFadeIn 0.6s 0.15s ease both;}
+.hero-stats{animation:heroFadeIn 0.6s 0.3s ease both;}
+@keyframes heroFadeIn{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+
+/* STAT GLOW */
+.stat-n{text-shadow:0 0 20px rgba(226,185,59,0.4);}
+
+/* CARD HOVER GLOW */
+.eq-card:hover,.tip-card:hover,.faq-item.open{box-shadow:0 4px 16px rgba(0,0,0,0.25),0 0 0 1px rgba(201,162,39,0.08);}
+.review-card:hover{box-shadow:0 4px 16px rgba(0,0,0,0.25),0 0 0 1px rgba(201,162,39,0.1);}
+
+/* GALLERY UNIFIED */
+.gal-item{background:linear-gradient(135deg,var(--surface2),var(--bg3));transition:transform 0.25s,box-shadow 0.25s;}
+.gal-item:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.4),0 0 0 1px rgba(201,162,39,0.15);}
+
+/* FIXED BOTTOM BOOK BUTTON */
+.fixed-book-btn{position:fixed;bottom:0;left:0;right:0;z-index:50;padding:12px 18px 16px;background:linear-gradient(to top,var(--bg) 60%,transparent);pointer-events:none;}
+.fixed-book-btn button{width:100%;background:var(--gold);border:none;border-radius:var(--r);padding:15px;font-size:15px;font-weight:600;font-family:'Raleway',sans-serif;color:var(--text-inv);cursor:pointer;pointer-events:all;letter-spacing:0.3px;animation:btnPulse 2.5s ease-in-out infinite;transition:background 0.2s,transform 0.1s;}
+.fixed-book-btn button:hover{background:var(--gold2);}
+.fixed-book-btn button:active{transform:scale(0.98);}
+@keyframes btnPulse{0%,100%{box-shadow:0 4px 20px rgba(201,162,39,0.3);}50%{box-shadow:0 4px 32px rgba(201,162,39,0.55);}}
+.fixed-book-btn.hidden{display:none;}
+
+/* BIGGER HEADINGS */
+.hero-title{font-size:26px;line-height:1.3;}
+.sec-title{font-size:19px;line-height:1.4;}
+
+/* BETTER WEATHER TEMP */
+.wc-temp{font-family:'Playfair Display',serif;font-size:42px;font-weight:700;color:var(--text);line-height:1;display:flex;align-items:flex-start;}
+.wc-temp .deg{font-size:22px;margin-top:4px;color:var(--text2);}
+
+/* DATE WEATHER BADGE */
+.dc-weather{font-size:10px;margin-top:3px;line-height:1;}
+
+/* PAGE BOTTOM PADDING for fixed btn */
+.page{padding-bottom:110px;}
 </style>
 </head>
 <body>
+
+
+<div class="fixed-book-btn" id="fixed-book-btn">
+  <button onclick="showPage('book')">🎣 Записаться на тур — 9 000 ₽</button>
+</div>
 
 <div class="sending-overlay" id="sending-overlay">
   <div class="sending-spinner"></div>
@@ -324,20 +382,19 @@ body{font-family:'Raleway',sans-serif;background:var(--bg);color:var(--text);min
 </div>
 
 <div class="nav">
-  <button class="nav-btn active" onclick="showPage('home')">Главная</button>
-  <button class="nav-btn" onclick="showPage('program')">Программа</button>
-  <button class="nav-btn" onclick="showPage('equipment')">Снаряжение</button>
-  <button class="nav-btn" onclick="showPage('tips')">Новичкам</button>
-  <button class="nav-btn" onclick="showPage('faq')">FAQ</button>
-  <button class="nav-btn" onclick="showPage('contact')">Контакты</button>
-  <button class="nav-btn" onclick="showPage('book')">Записаться</button>
+  <button class="nav-btn active" onclick="showPage('home')">🏠 Главная</button>
+  <button class="nav-btn" onclick="showPage('program')">📋 Тур</button>
+  <button class="nav-btn" onclick="showPage('equipment')">🎣 Снасти</button>
+  <button class="nav-btn" onclick="showPage('tips')">📖 Новичкам</button>
+  <button class="nav-btn" onclick="showPage('faq')">❓ FAQ</button>
+  <button class="nav-btn" onclick="showPage('contact')">📞 Контакты</button>
+  <button class="nav-btn" onclick="showPage('book')">✅ Запись</button>
 </div>
 
 <!-- HOME -->
 <div class="page active" id="page-home">
   <div class="hero">
     <div class="hero-pattern"></div>
-    <div class="hero-tag">🐟 Сезон открыт</div>
     <div class="hero-title">Настоящая рыбалка<br>на Плещеевом озере</div>
     <div class="hero-desc">Секретные и проверенные места, где клюёт. Дядя Ваня знает каждый метр озера уже больше 15 лет — и готов поделиться этим с вами.</div>
     <div class="hero-stats">
@@ -374,6 +431,7 @@ body{font-family:'Raleway',sans-serif;background:var(--bg);color:var(--text);min
     <div class="wc-fishing" id="wc-fishing">🎣 Оцениваем условия для рыбалки...</div>
   </div>
 
+  <div class="sec-divider"><span>✦</span></div>
   <div class="sec-title">Почему едут к нам</div>
   <div class="info-card">
     <div class="ic-head"><div class="ic-icon">📍</div><div class="ic-title">Секретные точки</div></div>
@@ -388,21 +446,36 @@ body{font-family:'Raleway',sans-serif;background:var(--bg);color:var(--text);min
     <div class="ic-body">Дядя Ваня подберёт место и снасти под текущий сезон. Даже если вы никогда не рыбачили — научим прямо на месте.</div>
   </div>
 
+  <div class="sec-divider"><span>✦</span></div>
   <div class="honest-block">
     <div class="hb-title">🤝 Честно о рыбалке</div>
     <div class="hb-body">Мы не обещаем, что вы обязательно поймаете рыбу — <b>никто не может этого гарантировать</b>. Рыба живёт по своим законам: погода, давление, сезон, температура воды — всё это влияет независимо от нас. Но вот что мы <b>гарантируем точно</b>: лучшие места на озере, правильные снасти, опытный проводник рядом и незабываемое время на природе. Дядя Ваня сделает всё, что в человеческих силах — остальное за рыбой.</div>
   </div>
 
+  <div class="sec-divider"><span>✦</span></div>
   <div class="sec-title">Галерея уловов</div>
   <div class="gallery">
-    <div class="gal-item"><div class="gal-emoji">🐟</div><div class="gal-cap">Щука 4.2 кг<br>Июнь 2024</div><div class="gal-badge">Трофей</div></div>
-    <div class="gal-item"><div class="gal-emoji">🎣</div><div class="gal-cap">Утренняя зорька<br>Май 2024</div></div>
-    <div class="gal-item"><div class="gal-emoji">🌅</div><div class="gal-cap">Рассвет на Плещеевом<br>Апрель 2024</div></div>
-    <div class="gal-item"><div class="gal-emoji">🐠</div><div class="gal-cap">Улов за день<br>Июль 2024</div><div class="gal-badge">Рекорд</div></div>
+    <div class="gal-item">
+      <svg viewBox="0 0 120 90" fill="none" style="width:80px;opacity:0.7"><path d="M20 55 Q40 30 60 45 Q80 58 100 38" stroke="#c9a227" stroke-width="1.5" fill="none" stroke-linecap="round"/><ellipse cx="60" cy="48" rx="14" ry="9" stroke="#c9a227" stroke-width="1" fill="none" transform="rotate(-15 60 48)"/><circle cx="65" cy="44" r="2" fill="#c9a227"/><path d="M95 38 L105 32 L100 42 Z" fill="#c9a227" opacity="0.6"/></svg>
+      <div class="gal-cap">Щука 4.2 кг<br>Июнь 2024</div><div class="gal-badge">Трофей</div>
+    </div>
+    <div class="gal-item">
+      <svg viewBox="0 0 120 90" fill="none" style="width:80px;opacity:0.7"><circle cx="60" cy="30" r="12" stroke="#c9a227" stroke-width="1" fill="none" opacity="0.5"/><path d="M60 42 L60 75" stroke="#c9a227" stroke-width="1.5"/><path d="M40 55 Q60 45 80 55" stroke="#c9a227" stroke-width="1" fill="none" opacity="0.4"/><path d="M55 42 Q50 55 45 70" stroke="#c9a227" stroke-width="1" fill="none"/><circle cx="45" cy="71" r="3" fill="#c9a227" opacity="0.6"/></svg>
+      <div class="gal-cap">Утренняя зорька<br>Май 2024</div>
+    </div>
+    <div class="gal-item">
+      <svg viewBox="0 0 120 90" fill="none" style="width:80px;opacity:0.7"><path d="M10 65 Q30 55 60 60 Q90 65 110 55" stroke="#c9a227" stroke-width="1" fill="none" opacity="0.4"/><path d="M10 72 Q30 62 60 67 Q90 72 110 62" stroke="#c9a227" stroke-width="1" fill="none" opacity="0.25"/><circle cx="60" cy="28" r="14" stroke="#c9a227" stroke-width="1" fill="none" opacity="0.3"/><path d="M45 28 L60 10 L75 28" stroke="#c9a227" stroke-width="1" fill="none" opacity="0.5"/></svg>
+      <div class="gal-cap">Рассвет на Плещеевом<br>Апрель 2024</div>
+    </div>
+    <div class="gal-item">
+      <svg viewBox="0 0 120 90" fill="none" style="width:80px;opacity:0.7"><rect x="30" y="50" width="60" height="25" rx="3" stroke="#c9a227" stroke-width="1" fill="none"/><path d="M35 50 Q60 30 85 50" stroke="#c9a227" stroke-width="1" fill="none"/><circle cx="48" cy="43" r="4" stroke="#c9a227" stroke-width="1" fill="none"/><circle cx="72" cy="40" r="5" stroke="#c9a227" stroke-width="1" fill="none"/><circle cx="60" cy="37" r="3" stroke="#c9a227" stroke-width="1" fill="none"/></svg>
+      <div class="gal-cap">Улов за день<br>Июль 2024</div><div class="gal-badge">Рекорд</div>
+    </div>
   </div>
 
+  <div class="sec-divider"><span>✦</span></div>
   <div class="sec-title">Отзывы гостей</div>
-  <div class="reviews-scroll">
+  <div style="position:relative;"><div class="reviews-scroll" id="reviews-scroll">
     <div class="review-card">
       <div class="rv-stars">★★★★★</div>
       <div class="rv-text">Поехали с друзьями — поймали троих щук и кучу окуней. Дядя Ваня знает места, которых нет ни на одной карте. Приедем снова!</div>
@@ -423,9 +496,8 @@ body{font-family:'Raleway',sans-serif;background:var(--bg);color:var(--text);min
       <div class="rv-text">Ездили с сыном 9 лет. Ребёнок в восторге — поймал свою первую щуку! Дядя Ваня отличный гид и просто хороший человек.</div>
       <div class="rv-author"><div class="rv-avatar">👶</div><div><div class="rv-name">Михаил Р.</div><div class="rv-date">Июль 2024</div></div></div>
     </div>
-  </div>
+  </div><div style="position:absolute;right:0;top:0;bottom:8px;width:40px;background:linear-gradient(to left,var(--bg),transparent);pointer-events:none;border-radius:0 var(--r) var(--r) 0;"></div></div>
 
-  <button class="main-btn" onclick="showPage('book')">🎣 Записаться на тур — 9 000 ₽</button>
 </div>
 
 <!-- PROGRAM -->
@@ -691,7 +763,7 @@ function loadWeather(){
       const icons={0:'☀️',1:'🌤',2:'⛅',3:'☁️',45:'🌫',48:'🌫',51:'🌦',53:'🌦',55:'🌧',61:'🌧',63:'🌧',65:'🌧',71:'🌨',73:'🌨',75:'❄️',80:'🌦',81:'🌧',82:'⛈',95:'⛈',96:'⛈',99:'⛈'};
       const descs={0:'Ясно',1:'Преимущественно ясно',2:'Переменная облачность',3:'Пасмурно',45:'Туман',48:'Гололедица',51:'Лёгкая морось',53:'Морось',55:'Сильная морось',61:'Небольшой дождь',63:'Дождь',65:'Сильный дождь',71:'Небольшой снег',73:'Снег',75:'Сильный снег',80:'Ливневый дождь',81:'Ливень',82:'Сильный ливень',95:'Гроза',96:'Гроза с градом',99:'Гроза с сильным градом'};
       document.getElementById('wc-icon').textContent=icons[code]||'🌤';
-      document.getElementById('wc-temp').textContent=temp+'°';
+      document.getElementById('wc-temp').innerHTML=temp+'<span style="font-size:20px;vertical-align:super;line-height:1;">°</span>';
       document.getElementById('wc-desc').textContent=descs[code]||'Переменная облачность';
       document.getElementById('wc-wind').textContent=wind+' км/ч';
       document.getElementById('wc-humidity').textContent=hum+'%';
@@ -708,12 +780,14 @@ function loadWeather(){
     })
     .catch(()=>{
       document.getElementById('wc-icon').textContent='🌤';
-      document.getElementById('wc-temp').textContent='—°';
+      document.getElementById('wc-temp').innerHTML='—<span style="font-size:20px;vertical-align:super;line-height:1;">°</span>';
       document.getElementById('wc-desc').textContent='Нет связи с сервером погоды';
       document.getElementById('wc-update').textContent='—';
       document.getElementById('wc-fishing').textContent='🎣 Позвоните Дяде Ване — он всегда знает погоду на озере!';
     });
 }
+
+let forecastData={};
 
 function generateDates(){
   const grid=document.getElementById('dates-grid');
@@ -725,19 +799,60 @@ function generateDates(){
     const d=new Date();d.setDate(now.getDate()+i);
     const day=d.getDate();const mo=months[d.getMonth()];const moF=monthsFull[d.getMonth()];
     const isSold=sold.includes(i);
+    const dateKey=d.toISOString().slice(0,10);
     const el=document.createElement('div');
     el.className='dc'+(isSold?' sold':'');
-    el.innerHTML=`<div class="dc-day">${day}</div><div class="dc-mo">${mo}</div>${isSold?'<div class="dc-sold">занято</div>':''}`;
-    if(!isSold)el.onclick=()=>selectDate(el,`${day} ${moF}`);
+    el.id='dc-'+dateKey;
+    el.innerHTML=`<div class="dc-day">${day}</div><div class="dc-mo">${mo}</div><div class="dc-weather" id="dcw-${dateKey}">·</div>${isSold?'<div class="dc-sold">занято</div>':''}`;
+    if(!isSold)el.onclick=()=>selectDate(el,`${day} ${moF}`,dateKey);
     grid.appendChild(el);
   }
+  loadForecast();
 }
 
-function selectDate(el,dateStr){
+function loadForecast(){
+  const lat=56.7372,lon=38.8567;
+  const icons={0:'☀️',1:'🌤',2:'⛅',3:'☁️',45:'🌫',51:'🌦',53:'🌦',55:'🌧',61:'🌧',63:'🌧',65:'🌧',71:'🌨',73:'🌨',75:'❄️',80:'🌦',81:'🌧',82:'⛈',95:'⛈',96:'⛈',99:'⛈'};
+  fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=temperature_2m_max,weathercode,windspeed_10m_max&timezone=Europe/Moscow&forecast_days=14`)
+    .then(r=>r.json())
+    .then(data=>{
+      const dates=data.daily.time;
+      const temps=data.daily.temperature_2m_max;
+      const codes=data.daily.weathercode;
+      const winds=data.daily.windspeed_10m_max;
+      dates.forEach((date,i)=>{
+        forecastData[date]={temp:Math.round(temps[i]),code:codes[i],wind:Math.round(winds[i]),icon:icons[codes[i]]||'🌤'};
+        const el=document.getElementById('dcw-'+date);
+        if(el){
+          const f=forecastData[date];
+          el.textContent=f.icon+' '+f.temp+'°';
+          el.style.color='var(--text3)';
+        }
+      });
+    })
+    .catch(()=>{});
+}
+
+function selectDate(el,dateStr,dateKey){
   document.querySelectorAll('.dates-grid .dc').forEach(i=>i.classList.remove('sel'));
   el.classList.add('sel');
   bookingData.date=dateStr;
   document.getElementById('btn-to-step2').disabled=false;
+  if(dateKey&&forecastData[dateKey]){
+    const f=forecastData[dateKey];
+    const good=([0,1,2].includes(f.code)&&f.wind<25);
+    const bad=([61,63,65,80,81,82,95,96,99].includes(f.code)||f.wind>=30);
+    let tip='',tipColor='var(--gold2)';
+    if(good){tip=`${f.icon} ${f.temp}° — хорошие условия для рыбалки!`;tipColor='var(--green)';}
+    else if(bad){tip=`${f.icon} ${f.temp}° — неблагоприятная погода`;tipColor='var(--red)';}
+    else{tip=`${f.icon} ${f.temp}° — условия умеренные`;tipColor='var(--amber)';}
+    let tipEl=document.getElementById('date-weather-tip');
+    if(!tipEl){tipEl=document.createElement('div');tipEl.id='date-weather-tip';tipEl.style.cssText='margin-top:10px;padding:9px 12px;border-radius:8px;font-size:12px;line-height:1.5;border:1px solid;';document.getElementById('dates-grid').after(tipEl);}
+    tipEl.textContent=tip;
+    tipEl.style.color=tipColor;
+    tipEl.style.borderColor=tipColor+'44';
+    tipEl.style.background=tipColor+'11';
+  }
 }
 
 function showPage(pageId){
@@ -747,6 +862,8 @@ function showPage(pageId){
     b.classList.remove('active');
     if(b.getAttribute('onclick').includes(pageId))b.classList.add('active');
   });
+  const fb=document.getElementById('fixed-book-btn');
+  if(fb)fb.classList.toggle('hidden',pageId==='book');
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
@@ -883,4 +1000,3 @@ function resetBooking(){
 </script>
 </body>
 </html>
-
