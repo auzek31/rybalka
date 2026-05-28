@@ -625,7 +625,7 @@ body{font-family:'Raleway',sans-serif;background:var(--bg);color:var(--text);min
       <div class="sum-total"><span class="sum-tl">Итого к оплате:</span><span class="sum-tv" id="sum-total-val">9 000 ₽</span></div>
     </div>
     <div style="font-size:12px;color:var(--text3);margin-top:12px;line-height:1.55;text-align:center;">Оплата производится лично Дяде Ване в день тура. Предоплата не требуется.</div>
-    <button class="main-btn" id="btn-submit" onclick="submitBooking()" disabled>Подтвердить запись</button>
+    <button class="main-btn" id="btn-submit" onclick="submitBooking()">Подтвердить запись</button>
   </div>
 
   <!-- Success -->
@@ -819,12 +819,16 @@ function checkFormValid(){
   const n=document.getElementById('inp-name').value.trim();
   const p=document.getElementById('inp-phone').value.trim();
   bookingData.name=n;bookingData.phone=p;
-  document.getElementById('btn-submit').disabled=!(n.length>1&&p.length>5);
 }
 
 function toggleFaq(el){el.classList.toggle('open');}
 
 function submitBooking(){
+  const n=document.getElementById('inp-name').value.trim();
+  const p=document.getElementById('inp-phone').value.trim();
+  if(!n||n.length<2){alert('Пожалуйста, введите ваше имя');return;}
+  if(!p||p.length<6){alert('Пожалуйста, введите номер телефона');return;}
+  bookingData.name=n;bookingData.phone=p;
   bookingData.source=document.getElementById('inp-source').value;
   document.getElementById('sending-overlay').classList.add('show');
   const tMap={boat:'С лодки',shore:'С берега'};
