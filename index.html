@@ -4,7 +4,91 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Охота и рыбалка с Дядей Ваней</title>
-<script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
+<script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js">
+// =============================================
+// FIREBASE CONFIG
+// =============================================
+const FIREBASE_URL =  + FIREBASE_URL + ;
+const TG_TOKEN =  + TG_TOKEN + ;
+const TG_CHAT =  + TG_CHAT + ;
+
+let bookedDates = {};
+
+function loadBookedDates() {
+  fetch(FIREBASE_URL + '/bookings.json')
+    .then(r => r.json())
+    .then(data => {
+      bookedDates = {};
+      if (data) {
+        Object.values(data).forEach(b => {
+          if (b.status !== 'cancelled' && b.date) {
+            bookedDates[b.date] = true;
+          }
+        });
+      }
+      generateDates();
+    })
+    .catch(() => {
+      generateDates();
+    });
+}
+
+function saveBookingToFirebase(bookingId, data) {
+  return fetch(FIREBASE_URL + '/bookings/' + bookingId + '.json', {
+    method: 'PUT',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(data)
+  });
+}
+
+function sendTelegramNotification(data) {
+  const tMap = {boat: 'С лодки 🚤', shore: 'С берега 🏕️'};
+  const sMap = {vk: 'ВКонтакте', friends: 'От друзей', search: 'Поисковик', youtube: 'YouTube', other: 'Другое', '': '—'};
+  
+  let extrasText = '';
+  const extraLabels = {
+    kitchild: 'Детский набор', kitadult: 'Взрослый набор',
+    smoke: 'Копчение улова', tent: 'Палатка',
+    clean: 'Чистка улова', masterclass: 'Мастер-класс',
+    photosession: 'Фотосессия', delivery: 'Доставка улова'
+  };
+  for (const [k, label] of Object.entries(extraLabels)) {
+    if (data[k] > 0) extrasText += `\n   • ${label}: ${data[k]} шт.`;
+  }
+
+  const msg = `🎣 *НОВАЯ ЗАЯВКА НА РЫБАЛКУ*
+━━━━━━━━━━━━━━━━━━━━
+👤 *Клиент:* ${data.name}
+📞 *Телефон:* ${data.phone}
+━━━━━━━━━━━━━━━━━━━━
+📅 *Дата:* ${data.date}
+⏰ *Время:* ${data.timeFrom}:00 — ${data.timeTo}:00
+🚤 *Тип:* ${tMap[data.fishType] || data.fishType}
+👥 *Человек:* ${data.people}
+━━━━━━━━━━━━━━━━━━━━${extrasText ? '\n📦 *Доп. услуги:*' + extrasText + '\n━━━━━━━━━━━━━━━━━━━━' : ''}
+💰 *Итого:* ${data.total.toLocaleString('ru')} ₽
+📊 *Источник:* ${sMap[data.source] || '—'}
+━━━━━━━━━━━━━━━━━━━━
+🆔 ID брони: \`${data.id}\``;
+
+  return fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendMessage`, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      chat_id: TG_CHAT,
+      text: msg,
+      parse_mode: 'Markdown',
+      reply_markup: {
+        inline_keyboard: [[
+          {text: '✅ Подтвердить', callback_data: 'confirm_' + data.id},
+          {text: '❌ Отменить', callback_data: 'cancel_' + data.id}
+        ]]
+      }
+    })
+  });
+}
+
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -803,8 +887,8 @@ const extraConfig={
 window.addEventListener('load',()=>{
   setTimeout(()=>document.getElementById('splash').classList.add('gone'),1800);
   initVKBridge();
-  generateDates();
   loadWeather();
+  loadBookedDates();
 });
 
 function initVKBridge(){
@@ -866,17 +950,17 @@ function generateDates(){
   if(!grid)return;
   grid.innerHTML='';
   const now=new Date();
-  const sold=[3,7];
   for(let i=0;i<12;i++){
     const d=new Date();d.setDate(now.getDate()+i);
     const day=d.getDate();const mo=months[d.getMonth()];const moF=monthsFull[d.getMonth()];
-    const isSold=sold.includes(i);
     const dateKey=d.toISOString().slice(0,10);
+    const dateLabel=`${day} ${moF}`;
+    const isSold=bookedDates[dateLabel]||false;
     const el=document.createElement('div');
     el.className='dc'+(isSold?' sold':'');
     el.id='dc-'+dateKey;
     el.innerHTML=`<div class="dc-day">${day}</div><div class="dc-mo">${mo}</div><div class="dc-weather" id="dcw-${dateKey}">·</div>${isSold?'<div class="dc-sold">занято</div>':''}`;
-    if(!isSold)el.onclick=()=>selectDate(el,`${day} ${moF}`,dateKey);
+    if(!isSold)el.onclick=()=>selectDate(el,dateLabel,dateKey);
     grid.appendChild(el);
   }
   loadForecast();
@@ -1030,30 +1114,50 @@ function submitBooking(){
     'Палатка':bookingData.tent,'Чистка улова':bookingData.clean,'Мастер-класс':bookingData.masterclass,'Фотосессия':bookingData.photosession,'Доставка улова':bookingData.delivery,
     'Итоговая сумма':bookingData.total+' ₽','Источник':sMap[bookingData.source]||'—'
   };
-  fetch('https://formspree.io/f/mbdbqaql',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(emailData)})
-    .then(r=>{
-      document.getElementById('sending-overlay').classList.remove('show');
-      if(r.ok){
-        document.querySelectorAll('.book-step').forEach(s=>s.classList.remove('active'));
-        document.getElementById('bs-success').classList.add('active');
-        let extrasLine='';
-        for(const[k,cfg]of Object.entries(extraConfig)){if(bookingData[k]>0)extrasLine+=`<div class="sum-row"><span class="sum-lbl">${cfg.label}</span><span class="sum-val">${bookingData[k]} шт.</span></div>`;}
-        document.getElementById('success-card-details').innerHTML=`
-          <div class="sum-row"><span class="sum-lbl">Дата</span><span class="sum-val">${bookingData.date}</span></div>
-          <div class="sum-row"><span class="sum-lbl">Время</span><span class="sum-val">${String(bookingData.timeFrom).padStart(2,'0')}:00 — ${String(bookingData.timeTo).padStart(2,'0')}:00</span></div>
-          <div class="sum-row"><span class="sum-lbl">Тип</span><span class="sum-val">${tMap[bookingData.fishType]}</span></div>
-          <div class="sum-row"><span class="sum-lbl">Гостей</span><span class="sum-val">${bookingData.people} чел.</span></div>
-          ${extrasLine}
-          <div class="sum-total" style="margin-top:8px;border-top:1px dashed var(--border);padding-top:8px;"><span class="sum-tl">Сумма к оплате</span><span class="sum-tv" style="font-size:20px;">${bookingData.total.toLocaleString('ru')} ₽</span></div>`;
-        if(typeof vkBridge!=='undefined')vkBridge.send('VKWebAppTapticNotificationOccurred',{'type':'success'}).catch(e=>console.log(e));
-      } else {
-        alert('Ошибка отправки. Позвоните Дяде Ване напрямую: +7 995 692-60-86');
-      }
-    })
-    .catch(()=>{
-      document.getElementById('sending-overlay').classList.remove('show');
-      alert('Проблема с сетью. Позвоните Дяде Ване: +7 995 692-60-86');
-    });
+  // Генерируем ID брони
+  const bookingId = 'b' + Date.now();
+  const fullData = {
+    ...emailData,
+    id: bookingId,
+    status: 'pending',
+    createdAt: new Date().toISOString(),
+    name: bookingData.name,
+    phone: bookingData.phone,
+    date: bookingData.date,
+    timeFrom: String(bookingData.timeFrom).padStart(2,'0') + ':00',
+    timeTo: String(bookingData.timeTo).padStart(2,'0') + ':00',
+    fishType: bookingData.fishType,
+    people: bookingData.people,
+    total: bookingData.total,
+    source: bookingData.source,
+    ...Object.fromEntries(Object.keys(extraConfig).map(k => [k, bookingData[k]]))
+  };
+
+  Promise.all([
+    saveBookingToFirebase(bookingId, fullData),
+    sendTelegramNotification(fullData)
+  ])
+  .then(() => {
+    document.getElementById('sending-overlay').classList.remove('show');
+    document.querySelectorAll('.book-step').forEach(s=>s.classList.remove('active'));
+    document.getElementById('bs-success').classList.add('active');
+    let extrasLine='';
+    for(const[k,cfg]of Object.entries(extraConfig)){if(bookingData[k]>0)extrasLine+=`<div class="sum-row"><span class="sum-lbl">${cfg.label}</span><span class="sum-val">${bookingData[k]} шт.</span></div>`;}
+    document.getElementById('success-card-details').innerHTML=`
+      <div class="sum-row"><span class="sum-lbl">Дата</span><span class="sum-val">${bookingData.date}</span></div>
+      <div class="sum-row"><span class="sum-lbl">Время</span><span class="sum-val">${String(bookingData.timeFrom).padStart(2,'0')}:00 — ${String(bookingData.timeTo).padStart(2,'0')}:00</span></div>
+      <div class="sum-row"><span class="sum-lbl">Тип</span><span class="sum-val">${tMap[bookingData.fishType]}</span></div>
+      <div class="sum-row"><span class="sum-lbl">Гостей</span><span class="sum-val">${bookingData.people} чел.</span></div>
+      ${extrasLine}
+      <div class="sum-total" style="margin-top:8px;border-top:1px dashed var(--border);padding-top:8px;"><span class="sum-tl">Сумма к оплате</span><span class="sum-tv" style="font-size:20px;">${bookingData.total.toLocaleString('ru')} ₽</span></div>`;
+    // Помечаем дату как занятую
+    bookedDates[bookingData.date] = true;
+    if(typeof vkBridge!=='undefined')vkBridge.send('VKWebAppTapticNotificationOccurred',{'type':'success'}).catch(e=>console.log(e));
+  })
+  .catch(()=>{
+    document.getElementById('sending-overlay').classList.remove('show');
+    alert('Проблема с сетью. Позвоните Дяде Ване: +7 995 692-60-86');
+  });
 }
 
 function resetBooking(){
@@ -1067,8 +1171,92 @@ function resetBooking(){
     const row=document.getElementById('ex-row-'+k);if(row)row.classList.remove('sel');
   });
   selectFishType('boat');
-  generateDates();goStep(1);showPage('home');
+  loadBookedDates();goStep(1);showPage('home');
 }
+
+// =============================================
+// FIREBASE CONFIG
+// =============================================
+const FIREBASE_URL =  + FIREBASE_URL + ;
+const TG_TOKEN =  + TG_TOKEN + ;
+const TG_CHAT =  + TG_CHAT + ;
+
+let bookedDates = {};
+
+function loadBookedDates() {
+  fetch(FIREBASE_URL + '/bookings.json')
+    .then(r => r.json())
+    .then(data => {
+      bookedDates = {};
+      if (data) {
+        Object.values(data).forEach(b => {
+          if (b.status !== 'cancelled' && b.date) {
+            bookedDates[b.date] = true;
+          }
+        });
+      }
+      generateDates();
+    })
+    .catch(() => {
+      generateDates();
+    });
+}
+
+function saveBookingToFirebase(bookingId, data) {
+  return fetch(FIREBASE_URL + '/bookings/' + bookingId + '.json', {
+    method: 'PUT',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(data)
+  });
+}
+
+function sendTelegramNotification(data) {
+  const tMap = {boat: 'С лодки 🚤', shore: 'С берега 🏕️'};
+  const sMap = {vk: 'ВКонтакте', friends: 'От друзей', search: 'Поисковик', youtube: 'YouTube', other: 'Другое', '': '—'};
+  
+  let extrasText = '';
+  const extraLabels = {
+    kitchild: 'Детский набор', kitadult: 'Взрослый набор',
+    smoke: 'Копчение улова', tent: 'Палатка',
+    clean: 'Чистка улова', masterclass: 'Мастер-класс',
+    photosession: 'Фотосессия', delivery: 'Доставка улова'
+  };
+  for (const [k, label] of Object.entries(extraLabels)) {
+    if (data[k] > 0) extrasText += `\n   • ${label}: ${data[k]} шт.`;
+  }
+
+  const msg = `🎣 *НОВАЯ ЗАЯВКА НА РЫБАЛКУ*
+━━━━━━━━━━━━━━━━━━━━
+👤 *Клиент:* ${data.name}
+📞 *Телефон:* ${data.phone}
+━━━━━━━━━━━━━━━━━━━━
+📅 *Дата:* ${data.date}
+⏰ *Время:* ${data.timeFrom}:00 — ${data.timeTo}:00
+🚤 *Тип:* ${tMap[data.fishType] || data.fishType}
+👥 *Человек:* ${data.people}
+━━━━━━━━━━━━━━━━━━━━${extrasText ? '\n📦 *Доп. услуги:*' + extrasText + '\n━━━━━━━━━━━━━━━━━━━━' : ''}
+💰 *Итого:* ${data.total.toLocaleString('ru')} ₽
+📊 *Источник:* ${sMap[data.source] || '—'}
+━━━━━━━━━━━━━━━━━━━━
+🆔 ID брони: \`${data.id}\``;
+
+  return fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendMessage`, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      chat_id: TG_CHAT,
+      text: msg,
+      parse_mode: 'Markdown',
+      reply_markup: {
+        inline_keyboard: [[
+          {text: '✅ Подтвердить', callback_data: 'confirm_' + data.id},
+          {text: '❌ Отменить', callback_data: 'cancel_' + data.id}
+        ]]
+      }
+    })
+  });
+}
+
 </script>
 </body>
 </html>
